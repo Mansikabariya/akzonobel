@@ -9,7 +9,7 @@ class TTextTheme
       color: Colors.black,
       fontFamily: 'Poppins',
       fontSize: 20,
-      fontWeight: FontWeight.w600,
+      fontWeight: FontWeight.w500,
       letterSpacing: -1,
       wordSpacing: 3,
     ),
@@ -22,11 +22,41 @@ class TTextTheme
     ),
 
     labelSmall: TextStyle(
-      color: Colors.black,
-      fontSize: 16,
+      color: Colors.grey[800],
+      fontSize: 14,
       fontFamily: 'Poppins',
       fontWeight: FontWeight.w200,
     ),
+
+    headlineSmall: TextStyle(
+      color: Colors.white,
+      fontSize: 16,
+      fontFamily: 'Poppins',
+      fontWeight: FontWeight.w500,
+    ),
+
+    labelMedium: TextStyle(
+      color: Color(0xFF0D47A1),
+      fontSize: 14,
+      fontFamily: 'Poppins',
+      fontWeight: FontWeight.w300,
+    ),
+
+    titleSmall: TextStyle(
+      color: Colors.blue[800],
+      fontSize: 14,
+      fontFamily: 'Poppins',
+      fontWeight: FontWeight.w400,
+    ),
+
+    headlineMedium: TextStyle(
+      color: Colors.black,
+      fontSize: 14,
+      fontFamily: 'Poppins',
+      fontWeight: FontWeight.w300,
+    ),
+
+
   );
 }
 
@@ -36,10 +66,10 @@ class TElevatedButtonTheme
   TElevatedButtonTheme._();
 
   static ElevatedButtonThemeData lightButtonTheme = ElevatedButtonThemeData(
-    style: ButtonStyle(
-      textStyle: WidgetStatePropertyAll(TextStyle(color: Colors.white)),
-      backgroundColor: WidgetStatePropertyAll(Colors.transparent),
-      shadowColor: WidgetStatePropertyAll(Colors.transparent),
+    style: ElevatedButton.styleFrom(
+      textStyle: TTextTheme.lightTheme.headlineSmall,
+      backgroundColor: Colors.transparent,
+      shadowColor: Colors.transparent,
     ),
   );
 }

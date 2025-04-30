@@ -1,9 +1,12 @@
+import 'package:akzonobel/home_page/home_screen.dart';
 import 'package:akzonobel/resources/images.dart';
 import 'package:akzonobel/utils/theme.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  // static const route = '/loginScreen';
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -13,9 +16,36 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
+  final String _correctEmail = "mansi@gmail.com";
+  final String _correctPassword = "123456";
+
+  void handleLogin() {
+    final String enteredEmail = emailController.text.trim();
+    final String enteredPassword = passwordController.text.trim();
+
+    if (enteredEmail == _correctEmail && enteredPassword == _correctPassword) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          margin: EdgeInsets.only(bottom: 10, left: 20, right: 20),
+          backgroundColor: Colors.blue[700],
+          content: Text('Enter valid Email & Password'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFEAF7F6),
+      resizeToAvoidBottomInset: true,
       body: Column(
         children: [
           Padding(
@@ -27,40 +57,70 @@ class _LoginScreenState extends State<LoginScreen> {
             'Log in to your account',
             style: TTextTheme.lightTheme.displayMedium,
           ),
-          const SizedBox(height: 80),
-          CustomTextFormField(
-            label: 'Email',
-            icon: Icon(Icons.email),
-            controller: emailController,
-          ),
-          const SizedBox(height: 10),
-          CustomTextFormField(
-            label: 'Password',
-            icon: Icon(Icons.lock),
-            controller: passwordController,
-            isPassword: true,
-          ),
-          const SizedBox(height: 10),
-          Container(
-            margin: EdgeInsets.only(left: 20, right: 20),
-            height: 45,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30),
-              gradient: LinearGradient(
-                colors: [
-                  Colors.blue[900]!,
-                  Colors.blue[600]!,
-                  Colors.blue[400]!,
-                  Colors.blue[300]!,
-                ],
+          const SizedBox(height: 120),
+          Column(
+            children: [
+              SizedBox(
+                height: 45,
+                child: CustomTextFormField(
+                  controller: emailController,
+                  label: 'Email',
+                  icon: Icon(Icons.email, size: 18, color: Colors.grey[800]),
+                ),
               ),
+              const SizedBox(height: 20),
+              SizedBox(
+                height: 45,
+                child: CustomTextFormField(
+                  controller: passwordController,
+                  isPassword: true,
+                  label: 'Password',
+                  icon: Icon(Icons.lock, size: 18, color: Colors.grey[800]),
+                ),
+              ),
+              const SizedBox(height: 80),
+              CustomElevatedButton(
+                onPressed: handleLogin,
+                text: 'SIGN IN',
+                height: 45,
+                textStyle: TTextTheme.lightTheme.headlineSmall,
+                buttonType: ButtonType.filled,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 25, top: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 2),
+                      child: InkWell(
+                        onTap: () {},
+                        child: Text(
+                          'Forgot Password?',
+                          style: TTextTheme.lightTheme.labelMedium,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+
+          Padding(
+            padding: EdgeInsets.only(top: 50),
+            child: Text(
+              'Don\'t Have An Account?',
+              style: TTextTheme.lightTheme.headlineMedium,
             ),
-            child: ElevatedButton(
-              onPressed: () {},
-              style: TElevatedButtonTheme.lightButtonTheme.style,
-              child: Text('SIGN IN'),
-            ),
+          ),
+          const SizedBox(height: 30),
+          CustomElevatedButton(
+            onPressed: () {},
+            text: 'SIGN UP',
+            height: 45,
+            textStyle: TTextTheme.lightTheme.titleSmall,
+            buttonType: ButtonType.outlined,
           ),
         ],
       ),
@@ -97,16 +157,23 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       child: TextFormField(
         controller: widget.controller,
         obscureText: widget.isPassword ? _obscureText : false,
+        cursorColor: Colors.black,
+        cursorHeight: 20,
+        cursorWidth: 1.5,
+        textAlignVertical: TextAlignVertical.center,
         decoration: InputDecoration(
           prefixIcon: widget.icon,
           labelText: widget.label,
           labelStyle: TTextTheme.lightTheme.labelSmall,
-          border: OutlineInputBorder(borderSide: BorderSide.none),
+          focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(25),),
+          focusColor: Colors.blueAccent[600],
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(25),),
           suffixIcon:
               widget.isPassword
                   ? IconButton(
                     icon: Icon(
-                      _obscureText ? (Icons.visibility_off) : (Icons.visibility),
+                      _obscureText ? Icons.visibility_off : Icons.visibility,
+                      color: _obscureText ? Colors.blueAccent[600] : null,
                     ),
                     onPressed: () {
                       setState(() {
@@ -116,6 +183,137 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                   )
                   : null,
         ),
+      ),
+    );
+  }
+}
+
+// // Reusable lables
+// class LableWidget extends StatefulWidget {
+//   const LableWidget({super.key, required this.lable, required this.icon});
+//
+//   final String lable;
+//   final Icon icon;
+//
+//   @override
+//   State<LableWidget> createState() => _LableWidgetState();
+// }
+//
+// class _LableWidgetState extends State<LableWidget> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//       padding: const EdgeInsets.only(left: 20),
+//       child: Row(
+//         children: [
+//           Row(
+//             children: [
+//               widget.icon,
+//               const SizedBox(width: 5),
+//               Text(widget.lable, style: TTextTheme.lightTheme.labelSmall),
+//             ],
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
+
+// reusable Button
+enum ButtonType { filled, outlined }
+
+class CustomElevatedButton extends StatelessWidget {
+  final String text;
+  final VoidCallback onPressed;
+  final TextStyle? textStyle;
+  final double height;
+  final List<Color> gradientColors;
+  final ButtonType buttonType;
+
+  const CustomElevatedButton({
+    super.key,
+    required this.text,
+    required this.onPressed,
+    this.textStyle,
+    this.height = 45,
+    this.gradientColors = const [
+      Color(0xFF0D47A1),
+      Color(0xFF1565C0),
+      Color(0xFF1976D2),
+      Color(0xFF1E88E5),
+      Color(0xFF2196F3),
+      Color(0xFF42A5F5),
+    ],
+    this.buttonType = ButtonType.filled,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final borderRadius = BorderRadius.circular(30);
+
+    if (buttonType == ButtonType.outlined) {
+      return Container(
+        margin: const EdgeInsets.symmetric(horizontal: 20),
+        height: height,
+        width: double.infinity,
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
+        child: ElevatedButton(
+          onPressed: onPressed,
+          style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: borderRadius,
+              side: BorderSide(color: Colors.blue[700]!),
+            ),
+            backgroundColor: Colors.transparent,
+            shadowColor: Colors.transparent,
+          ),
+          child: Text(
+            text,
+            style:
+                textStyle ??
+                TextStyle(
+                  color: Colors.blue[700],
+                  fontSize: 16,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w500,
+                ),
+          ),
+        ),
+      );
+    }
+
+    // Filled gradient button
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      height: height,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(30),
+        // boxShadow: const [
+        //   BoxShadow(
+        //     color: Color(0x55000000),
+        //     offset: Offset(4, 4),
+        //     blurRadius: 6,
+        //     spreadRadius: 1,
+        //   ),
+        //   BoxShadow(
+        //     color: Color(0x33FFFFFF),
+        //     offset: Offset(-2, -2),
+        //     blurRadius: 4,
+        //     spreadRadius: 1,
+        //   ),
+        // ],
+        // borderRadius: borderRadius,
+        gradient: LinearGradient(colors: gradientColors),
+      ),
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.transparent,
+          shadowColor: Colors.transparent,
+          shape: RoundedRectangleBorder(borderRadius: borderRadius),
+        ),
+        child: Text(text, style: textStyle),
       ),
     );
   }
