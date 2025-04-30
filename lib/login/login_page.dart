@@ -1,7 +1,11 @@
 import 'package:akzonobel/home_page/home_screen.dart';
+import 'package:akzonobel/login/bloc/login_bloc.dart';
+import 'package:akzonobel/login/bloc/login_event.dart';
+import 'package:akzonobel/login/bloc/login_state.dart';
 import 'package:akzonobel/resources/images.dart';
 import 'package:akzonobel/utils/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -16,113 +20,115 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-  final String _correctEmail = "mansi@gmail.com";
-  final String _correctPassword = "123456";
-
-  void handleLogin() {
+  void handleLogin(BuildContext context) {
     final String enteredEmail = emailController.text.trim();
     final String enteredPassword = passwordController.text.trim();
 
-    if (enteredEmail == _correctEmail && enteredPassword == _correctPassword) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          behavior: SnackBarBehavior.floating,
-          margin: EdgeInsets.only(bottom: 10, left: 20, right: 20),
-          backgroundColor: Colors.blue[700],
-          content: Text('Enter valid Email & Password'),
-          duration: Duration(seconds: 2),
-        ),
-      );
-    }
+    context.read<LoginBloc>().add(
+      LoginButtonPressed(email: enteredEmail, password: enteredPassword),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFEAF7F6),
-      resizeToAvoidBottomInset: true,
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 50),
-            child: Image.asset(Images.logo),
-          ),
-          const SizedBox(height: 20),
-          Text(
-            'Log in to your account',
-            style: TTextTheme.lightTheme.displayMedium,
-          ),
-          const SizedBox(height: 120),
-          Column(
-            children: [
-              SizedBox(
-                height: 45,
-                child: CustomTextFormField(
-                  controller: emailController,
-                  label: 'Email',
-                  icon: Icon(Icons.email, size: 18, color: Colors.grey[800]),
+    return BlocListener<LoginBloc, LoginState>(
+      listener: (context, state) {
+        if (state is LoginLoading) {
+          CircularProgressIndicator();
+        } else if (state is LoginSuccess) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => HomeScreen()),
+          );
+        } else if (state is LoginError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message)),
+          );
+        }
+      },
+      child: Scaffold(
+        backgroundColor: const Color(0xFFEAF7F6),
+        resizeToAvoidBottomInset: true,
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 50),
+              child: Image.asset(Images.logo),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              'Log in to your account',
+              style: TTextTheme.lightTheme.displayMedium,
+            ),
+            const SizedBox(height: 120),
+            Column(
+              children: [
+                SizedBox(
+                  height: 45,
+                  child: CustomTextFormField(
+                    hint: 'Enter email',
+                    controller: emailController,
+                    label: 'Email',
+                    icon: Icon(Icons.email, size: 18, color: Colors.grey[800]),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              SizedBox(
-                height: 45,
-                child: CustomTextFormField(
-                  controller: passwordController,
-                  isPassword: true,
-                  label: 'Password',
-                  icon: Icon(Icons.lock, size: 18, color: Colors.grey[800]),
+                const SizedBox(height: 20),
+                SizedBox(
+                  height: 45,
+                  child: CustomTextFormField(
+                    hint: 'Enter Password',
+                    controller: passwordController,
+                    isPassword: true,
+                    label: 'Password',
+                    icon: Icon(Icons.lock, size: 18, color: Colors.grey[800]),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 80),
-              CustomElevatedButton(
-                onPressed: handleLogin,
-                text: 'SIGN IN',
-                height: 45,
-                textStyle: TTextTheme.lightTheme.headlineSmall,
-                buttonType: ButtonType.filled,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 25, top: 5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 2),
-                      child: InkWell(
-                        onTap: () {},
-                        child: Text(
-                          'Forgot Password?',
-                          style: TTextTheme.lightTheme.labelMedium,
+                const SizedBox(height: 80),
+                CustomElevatedButton(
+                  onPressed: () => handleLogin(context),
+                  text: 'SIGN IN',
+                  height: 45,
+                  textStyle: TTextTheme.lightTheme.headlineSmall,
+                  buttonType: ButtonType.filled,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 25, top: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 2),
+                        child: InkWell(
+                          onTap: () {},
+                          child: Text(
+                            'Forgot Password?',
+                            style: TTextTheme.lightTheme.labelMedium,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-
-          Padding(
-            padding: EdgeInsets.only(top: 50),
-            child: Text(
-              'Don\'t Have An Account?',
-              style: TTextTheme.lightTheme.headlineMedium,
+              ],
             ),
-          ),
-          const SizedBox(height: 30),
-          CustomElevatedButton(
-            onPressed: () {},
-            text: 'SIGN UP',
-            height: 45,
-            textStyle: TTextTheme.lightTheme.titleSmall,
-            buttonType: ButtonType.outlined,
-          ),
-        ],
+
+            Padding(
+              padding: EdgeInsets.only(top: 50),
+              child: Text(
+                'Don\'t Have An Account?',
+                style: TTextTheme.lightTheme.headlineMedium,
+              ),
+            ),
+            const SizedBox(height: 30),
+            CustomElevatedButton(
+              onPressed: () {},
+              text: 'SIGN UP',
+              height: 45,
+              textStyle: TTextTheme.lightTheme.titleSmall,
+              buttonType: ButtonType.outlined,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -134,10 +140,12 @@ class CustomTextFormField extends StatefulWidget {
   final Icon icon;
   final bool isPassword;
   final TextEditingController controller;
+  final String hint;
 
   const CustomTextFormField({
     super.key,
     required this.label,
+    required this.hint,
     required this.icon,
     this.isPassword = false,
     required this.controller,
@@ -162,12 +170,16 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         cursorWidth: 1.5,
         textAlignVertical: TextAlignVertical.center,
         decoration: InputDecoration(
-          prefixIcon: widget.icon,
+          prefixIcon: widget.icon, // Adjust this
           labelText: widget.label,
           labelStyle: TTextTheme.lightTheme.labelSmall,
-          focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(25),),
+          isDense: true,
+          contentPadding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 20.0), // 👈 This centers the input text
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(25),
+          ),
           focusColor: Colors.blueAccent[600],
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(25),),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
           suffixIcon:
               widget.isPassword
                   ? IconButton(
