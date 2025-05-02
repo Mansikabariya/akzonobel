@@ -3,7 +3,7 @@ import 'package:akzonobel/login/bloc/login_bloc.dart';
 import 'package:akzonobel/login/bloc/login_event.dart';
 import 'package:akzonobel/login/bloc/login_state.dart';
 import 'package:akzonobel/resources/images.dart';
-import 'package:akzonobel/utils/theme.dart';
+import 'package:akzonobel/utils/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -47,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       },
       child: Scaffold(
-        backgroundColor: const Color(0xFFEAF7F6),
+        backgroundColor: AppColors.mainBGColor,
         resizeToAvoidBottomInset: true,
         body: Column(
           children: [
@@ -58,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(height: 20),
             Text(
               'Log in to your account',
-              style: TTextTheme.lightTheme.displayMedium,
+              style: Theme.of(context).textTheme.displayMedium,
             ),
             const SizedBox(height: 120),
             Column(
@@ -88,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   onPressed: () => handleLogin(context),
                   text: 'SIGN IN',
                   height: 45,
-                  textStyle: TTextTheme.lightTheme.headlineSmall,
+                  textStyle: Theme.of(context).textTheme.headlineSmall,
                   buttonType: ButtonType.filled,
                 ),
                 Padding(
@@ -102,7 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           onTap: () {},
                           child: Text(
                             'Forgot Password?',
-                            style: TTextTheme.lightTheme.labelMedium,
+                            style: Theme.of(context).textTheme.labelMedium,
                           ),
                         ),
                       ),
@@ -116,7 +116,7 @@ class _LoginScreenState extends State<LoginScreen> {
               padding: EdgeInsets.only(top: 50),
               child: Text(
                 'Don\'t Have An Account?',
-                style: TTextTheme.lightTheme.headlineMedium,
+                style: Theme.of(context).textTheme.headlineMedium,
               ),
             ),
             const SizedBox(height: 30),
@@ -124,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
               onPressed: () {},
               text: 'SIGN UP',
               height: 45,
-              textStyle: TTextTheme.lightTheme.titleSmall,
+              textStyle: Theme.of(context).textTheme.titleSmall,
               buttonType: ButtonType.outlined,
             ),
           ],
@@ -163,6 +163,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
     return Padding(
       padding: const EdgeInsets.only(left: 25, right: 25),
       child: TextFormField(
+        style: TextStyle(height: 0.7),
         controller: widget.controller,
         obscureText: widget.isPassword ? _obscureText : false,
         cursorColor: Colors.black,
@@ -170,11 +171,11 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         cursorWidth: 1.5,
         textAlignVertical: TextAlignVertical.center,
         decoration: InputDecoration(
-          prefixIcon: widget.icon, // Adjust this
+          prefixIcon: widget.icon,
           labelText: widget.label,
-          labelStyle: TTextTheme.lightTheme.labelSmall,
+          labelStyle: Theme.of(context).textTheme.labelSmall,
           isDense: true,
-          contentPadding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 20.0), // 👈 This centers the input text
+          contentPadding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 20.0),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(25),
           ),
@@ -199,37 +200,6 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
     );
   }
 }
-
-// // Reusable lables
-// class LableWidget extends StatefulWidget {
-//   const LableWidget({super.key, required this.lable, required this.icon});
-//
-//   final String lable;
-//   final Icon icon;
-//
-//   @override
-//   State<LableWidget> createState() => _LableWidgetState();
-// }
-//
-// class _LableWidgetState extends State<LableWidget> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Padding(
-//       padding: const EdgeInsets.only(left: 20),
-//       child: Row(
-//         children: [
-//           Row(
-//             children: [
-//               widget.icon,
-//               const SizedBox(width: 5),
-//               Text(widget.lable, style: TTextTheme.lightTheme.labelSmall),
-//             ],
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
 
 // reusable Button
 enum ButtonType { filled, outlined }
@@ -301,21 +271,6 @@ class CustomElevatedButton extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
-        // boxShadow: const [
-        //   BoxShadow(
-        //     color: Color(0x55000000),
-        //     offset: Offset(4, 4),
-        //     blurRadius: 6,
-        //     spreadRadius: 1,
-        //   ),
-        //   BoxShadow(
-        //     color: Color(0x33FFFFFF),
-        //     offset: Offset(-2, -2),
-        //     blurRadius: 4,
-        //     spreadRadius: 1,
-        //   ),
-        // ],
-        // borderRadius: borderRadius,
         gradient: LinearGradient(colors: gradientColors),
       ),
       child: ElevatedButton(

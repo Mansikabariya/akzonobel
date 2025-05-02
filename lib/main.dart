@@ -1,6 +1,7 @@
 import 'package:akzonobel/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'home_page/home_screen.dart';
 import 'login/bloc/login_bloc.dart';
 import 'login/login_page.dart';
 
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
         elevatedButtonTheme: TElevatedButtonTheme.lightButtonTheme,
       ),
       debugShowCheckedModeBanner: false,
-      home:  LoginScreen(),
+      home:  HomeScreen(),
     );
   }
 }
