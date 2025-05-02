@@ -4,6 +4,7 @@ import 'package:akzonobel/login/bloc/login_event.dart';
 import 'package:akzonobel/login/bloc/login_state.dart';
 import 'package:akzonobel/resources/images.dart';
 import 'package:akzonobel/utils/app_color.dart';
+import 'package:akzonobel/utils/app_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -36,14 +37,13 @@ class _LoginScreenState extends State<LoginScreen> {
         if (state is LoginLoading) {
           CircularProgressIndicator();
         } else if (state is LoginSuccess) {
+          AppUtils.instance.showSnackBar(context, state.successMessage);
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => HomeScreen()),
           );
         } else if (state is LoginError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message)),
-          );
+          AppUtils.instance.showSnackBar(context, state.message);
         }
       },
       child: Scaffold(

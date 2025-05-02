@@ -13,7 +13,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       await Future.delayed(Duration(seconds: 1));
 
       if (event.email == correctEmail && event.password == correctPassword) {
-        emit(LoginSuccess());
+        emit(LoginSuccess('Login Successful'));
       } else {
         emit(LoginError('Invalid email or password'));
       }

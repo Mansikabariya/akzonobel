@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         elevatedButtonTheme: TElevatedButtonTheme.lightButtonTheme,
       ),
       debugShowCheckedModeBanner: false,
-      home:  HomeScreen(),
+      home:  LoginScreen(),
     );
   }
 }
