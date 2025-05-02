@@ -3,6 +3,10 @@ import 'dart:developer';
 import 'package:akzonobel/resources/images.dart';
 import 'package:flutter/material.dart';
 import 'package:akzonobel/utils/app_color.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'bloc/home_page_state.dart';
+import 'bloc/selectedIndex_cubit.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,203 +17,170 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
   int selectedIndex = 0;
   final appBarHeight = AppBar().preferredSize.height;
 
   @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(
+      length: 2,
+      vsync: this,
+    ); // Initialize the TabController
+  }
+
+  @override
+  void dispose() {
+    _tabController
+        .dispose(); // Dispose of the controller when the widget is disposed
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     log('Default AppBar Height: $appBarHeight');
-    return Scaffold(
-      backgroundColor: AppColors.mainBGColor,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
+    return BlocProvider(
+      create: (context) => SelectedIndexCubit(),
+      child: Scaffold(
         backgroundColor: AppColors.mainBGColor,
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Welcome', style: Theme.of(context).textTheme.titleMedium),
-            Text('Mansi', style: Theme.of(context).textTheme.bodyMedium),
-          ],
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.notifications_outlined),
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: AppColors.mainBGColor,
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Welcome', style: Theme.of(context).textTheme.titleMedium),
+              Text('Mansi', style: Theme.of(context).textTheme.bodyMedium),
+            ],
           ),
-          IconButton(onPressed: () {}, icon: Icon(Icons.chat_bubble_outline)),
-          // IconButton(onPressed: () {}, icon: Icon(Icons.person_outline)),
-          SizedBox(
-            height: 48,
-            width: 48,
-            // color: Colors.lightBlue,
-            child: InkWell(
-              onTap: () {},
-              child: Padding(
-                padding: const EdgeInsets.only(right: 8, left: 12),
-                child: CircleAvatar(
-                  radius: 12,
-                  backgroundImage: AssetImage(Images.profile),
+          actions: [
+            IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.notifications_outlined),
+            ),
+            IconButton(onPressed: () {}, icon: Icon(Icons.chat_bubble_outline)),
+            SizedBox(
+              height: 48,
+              width: 48,
+              child: InkWell(
+                onTap: () {},
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 8, left: 12),
+                  child: CircleAvatar(
+                    radius: 12,
+                    backgroundImage: AssetImage(Images.profile),
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 20),
-            child: Container(
-              height: 35,
-              margin: const EdgeInsets.symmetric(horizontal: 10),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.black12),
-              ),
-              child: Stack(
-                children: [
-                  AnimatedAlign(
-                    alignment: Alignment(10, 10),
-                    duration: const Duration(milliseconds: 250),
-                    curve: Curves.easeInOut,
-                    child: Container(
-                      width: MediaQuery.of(context).size.width / 2 - 20,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color:
-                            selectedIndex == 0
-                                ? AppColors.toggleBlueColor
-                                : AppColors.toggleWhiteColor,
-                        boxShadow: const [
-                          BoxShadow(blurRadius: 4, offset: Offset(0, 2)),
-                        ],
+          ],
+        ),
+        body: DefaultTabController(
+          length: 2, // Number of tabs
+          child: Column(
+            children: [
+              TabBar(
+                controller: _tabController,
+                tabs: [
+                  Tab(
+                    child: Text(
+                      'Upcoming Events',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w300,
                       ),
                     ),
                   ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color:
-                                selectedIndex == 0
-                                    ? AppColors.toggleBlueColor
-                                    : AppColors.toggleTransparent,
-                          ),
-                          child: InkWell(
-                            onTap: () => setState(() => selectedIndex = 0),
-                            child: Center(
-                              child: Text(
-                                'Upcoming Events',
-                                style: TextStyle(
-                                  color:
-                                      selectedIndex == 0
-                                          ? AppColors.toggleWhiteColor
-                                          : AppColors.blackColor,
-                                  fontFamily: 'Poppins',
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w300,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
+                  Tab(
+                    child: Text(
+                      'Past Events',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w300,
                       ),
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color:
-                                selectedIndex == 1
-                                    ? AppColors.toggleBlueColor
-                                    : AppColors.toggleTransparent,
-                          ),
-                          child: InkWell(
-                            onTap: () => setState(() => selectedIndex = 1),
-                            child: Center(
-                              child: Text(
-                                'Past Events',
-                                style: TextStyle(
-                                  color:
-                                      selectedIndex == 1
-                                          ? AppColors.toggleWhiteColor
-                                          : AppColors.blackColor,
-                                  fontFamily: 'Poppins',
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w300,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ],
               ),
-            ),
+              Expanded(
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.event_busy_outlined,
+                            color: Colors.blue,
+                            size: 30,
+                          ),
+                          Text(
+                            'There are no upcoming events at this time.',
+                            style: Theme.of(
+                              context,
+                            ).textTheme.titleMedium!.copyWith(fontSize: 14),
+                          ),
+                        ],
+                      ),
+                    ),
+                    // Past Events Tab
+                      ListView.builder(
+                        itemCount: events.length,
+                        itemBuilder: (context, index) {
+                          final event = events[index];
+                          return EventBanner(
+                            title: event.title,
+                            dateRange: event.dateRange,
+                            imagePath: event.imagePath,
+                            location: event.location,
+                          );
+                        },
+                      ),
+
+                    // // Upcoming Events Tab
+                    // if (selectedIndex == 0)
+                    //   Center(
+                    //     child: Column(
+                    //       mainAxisSize: MainAxisSize.min,
+                    //       children: [
+                    //         Icon(
+                    //           Icons.event_busy_outlined,
+                    //           color: Colors.blue,
+                    //           size: 30,
+                    //         ),
+                    //         Text(
+                    //           'There are no upcoming events at this time.',
+                    //           style: Theme.of(context).textTheme.titleMedium!.copyWith(fontSize: 14),
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   )
+                    // else
+                    // // Past Events Tab
+                    //   ListView.builder(
+                    //     itemCount: events.length,
+                    //     itemBuilder: (context, index) {
+                    //       final event = events[index];
+                    //       return EventBanner(
+                    //         title: event.title,
+                    //         dateRange: event.dateRange,
+                    //         imagePath: event.imagePath,
+                    //         location: event.location,
+                    //       );
+                    //     },
+                    //   ),
+                  ],
+                ),
+              ),
+            ],
           ),
-          // const SizedBox(height: 30),
-          if (selectedIndex == 0)
-            Expanded(
-              child: Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.event_busy_outlined,
-                      color: Colors.blue,
-                      size: 30,
-                    ),
-                    Text(
-                      'There are no upcoming events at this time.',
-                      style: Theme.of(
-                        context,
-                      ).textTheme.titleMedium!.copyWith(fontSize: 14),
-                    ),
-                  ],
-                ),
-              ),
-            )
-          else
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    EventBanner(
-                      title: 'Testing event',
-                      dateRange: '19 Jul | 23 Jul - 2024',
-                      imagePath: Images.banner,
-                      location: 'Ahmedabad',
-                    ),
-                    EventBanner(
-                      title: 'Test event',
-                      dateRange: '15 Feb | 18 Feb - 2025',
-                      imagePath: Images.banner_2,
-                      location: 'Intelivita,Ahmedabad',
-                    ),
-                    EventBanner(
-                      title: 'Test event',
-                      dateRange: '15 Feb | 18 Feb - 2025',
-                      imagePath: Images.banner_3,
-                      location: 'Intelivita,Ahmedabad',
-                    ),
-                    EventBanner(
-                      title: 'Testing event',
-                      dateRange: '19 Jul | 23 Jul - 2024',
-                      imagePath: Images.banner_4,
-                      location: 'Ahmedabad',
-                    ),
-                    EventBanner(
-                      title: 'Testing event',
-                      dateRange: '19 Jul | 23 Jul - 2024',
-                      imagePath: Images.banner_5,
-                      location: 'Ahmedabad',
-                    ),
-                  ],
-                ),
-              ),
-            ),
-        ],
+        ),
       ),
     );
   }

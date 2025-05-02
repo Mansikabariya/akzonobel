@@ -1,3 +1,4 @@
+import 'package:akzonobel/utils/route_utils.dart';
 import 'package:akzonobel/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      onGenerateRoute: onGeneratesAppRoutes,
       theme: ThemeData(
         useMaterial3: true,
         textTheme: TTextTheme.lightTheme,

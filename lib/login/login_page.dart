@@ -1,3 +1,5 @@
+import 'package:akzonobel/custom_widgets/elevated_button.dart';
+import 'package:akzonobel/custom_widgets/text_field.dart';
 import 'package:akzonobel/home_page/home_screen.dart';
 import 'package:akzonobel/login/bloc/login_bloc.dart';
 import 'package:akzonobel/login/bloc/login_event.dart';
@@ -11,7 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
-  // static const route = '/loginScreen';
+  static const route = '/loginScreen';
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -38,9 +40,8 @@ class _LoginScreenState extends State<LoginScreen> {
           CircularProgressIndicator();
         } else if (state is LoginSuccess) {
           AppUtils.instance.showSnackBar(context, state.successMessage);
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => HomeScreen()),
+          Navigator.pushReplacementNamed(
+            context, HomeScreen.route,
           );
         } else if (state is LoginError) {
           AppUtils.instance.showSnackBar(context, state.message);
@@ -134,154 +135,3 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-// custom text fields for reuse
-class CustomTextFormField extends StatefulWidget {
-  final String label;
-  final Icon icon;
-  final bool isPassword;
-  final TextEditingController controller;
-  final String hint;
-
-  const CustomTextFormField({
-    super.key,
-    required this.label,
-    required this.hint,
-    required this.icon,
-    this.isPassword = false,
-    required this.controller,
-  });
-
-  @override
-  State<CustomTextFormField> createState() => _CustomTextFormFieldState();
-}
-
-class _CustomTextFormFieldState extends State<CustomTextFormField> {
-  bool _obscureText = true;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 25, right: 25),
-      child: TextFormField(
-        style: TextStyle(height: 0.7),
-        controller: widget.controller,
-        obscureText: widget.isPassword ? _obscureText : false,
-        cursorColor: Colors.black,
-        cursorHeight: 20,
-        cursorWidth: 1.5,
-        textAlignVertical: TextAlignVertical.center,
-        decoration: InputDecoration(
-          prefixIcon: widget.icon,
-          labelText: widget.label,
-          labelStyle: Theme.of(context).textTheme.labelSmall,
-          isDense: true,
-          contentPadding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 20.0),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(25),
-          ),
-          focusColor: Colors.blueAccent[600],
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
-          suffixIcon:
-              widget.isPassword
-                  ? IconButton(
-                    icon: Icon(
-                      _obscureText ? Icons.visibility_off : Icons.visibility,
-                      color: _obscureText ? Colors.blueAccent[600] : null,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _obscureText = !_obscureText;
-                      });
-                    },
-                  )
-                  : null,
-        ),
-      ),
-    );
-  }
-}
-
-// reusable Button
-enum ButtonType { filled, outlined }
-
-class CustomElevatedButton extends StatelessWidget {
-  final String text;
-  final VoidCallback onPressed;
-  final TextStyle? textStyle;
-  final double height;
-  final List<Color> gradientColors;
-  final ButtonType buttonType;
-
-  const CustomElevatedButton({
-    super.key,
-    required this.text,
-    required this.onPressed,
-    this.textStyle,
-    this.height = 45,
-    this.gradientColors = const [
-      Color(0xFF0D47A1),
-      Color(0xFF1565C0),
-      Color(0xFF1976D2),
-      Color(0xFF1E88E5),
-      Color(0xFF2196F3),
-      Color(0xFF42A5F5),
-    ],
-    this.buttonType = ButtonType.filled,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final borderRadius = BorderRadius.circular(30);
-
-    if (buttonType == ButtonType.outlined) {
-      return Container(
-        margin: const EdgeInsets.symmetric(horizontal: 20),
-        height: height,
-        width: double.infinity,
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
-        child: ElevatedButton(
-          onPressed: onPressed,
-          style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: borderRadius,
-              side: BorderSide(color: Colors.blue[700]!),
-            ),
-            backgroundColor: Colors.transparent,
-            shadowColor: Colors.transparent,
-          ),
-          child: Text(
-            text,
-            style:
-                textStyle ??
-                TextStyle(
-                  color: Colors.blue[700],
-                  fontSize: 16,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w500,
-                ),
-          ),
-        ),
-      );
-    }
-
-    // Filled gradient button
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20),
-      height: height,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(30),
-        gradient: LinearGradient(colors: gradientColors),
-      ),
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.transparent,
-          shadowColor: Colors.transparent,
-          shape: RoundedRectangleBorder(borderRadius: borderRadius),
-        ),
-        child: Text(text, style: textStyle),
-      ),
-    );
-  }
-}
