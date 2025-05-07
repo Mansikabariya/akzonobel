@@ -7,14 +7,17 @@ Route<dynamic> onGeneratesAppRoutes(RouteSettings routeSettings) {
     case LoginScreen.route:
       return MaterialPageRoute(builder: (context) => LoginScreen());
 
-    case HomeScreen.route: return MaterialPageRoute(builder: (context) => HomeScreen());
+    case HomeScreen.route:
+      return MaterialPageRoute(builder: (context) => HomeScreen());
 
-    default: return MaterialPageRoute(
-      builder: (context) => Scaffold(
-        body: Center(
-          child: Text('No route defined for ${routeSettings.name}'),
-        ),
-      ),
-    );
+    default:
+      return MaterialPageRoute(
+        builder:
+            (context) => Scaffold(
+              body: Center(
+                child: Text('No route defined for ${routeSettings.name}'),
+              ),
+            ),
+      );
   }
 }

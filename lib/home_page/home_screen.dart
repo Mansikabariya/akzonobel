@@ -6,7 +6,7 @@ import 'package:akzonobel/utils/app_color.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'bloc/home_page_state.dart';
-import 'bloc/selectedIndex_cubit.dart';
+import 'bloc/selected_index_cubit.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -131,18 +131,18 @@ class _HomeScreenState extends State<HomeScreen>
                       ),
                     ),
                     // Past Events Tab
-                      ListView.builder(
-                        itemCount: events.length,
-                        itemBuilder: (context, index) {
-                          final event = events[index];
-                          return EventBanner(
-                            title: event.title,
-                            dateRange: event.dateRange,
-                            imagePath: event.imagePath,
-                            location: event.location,
-                          );
-                        },
-                      ),
+                    ListView.builder(
+                      itemCount: events.length,
+                      itemBuilder: (context, index) {
+                        final event = events[index];
+                        return EventBanner(
+                          title: event.title,
+                          dateRange: event.dateRange,
+                          imagePath: event.imagePath,
+                          location: event.location,
+                        );
+                      },
+                    ),
 
                     // // Upcoming Events Tab
                     // if (selectedIndex == 0)

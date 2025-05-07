@@ -1,6 +1,5 @@
-
-
 import 'package:flutter/material.dart';
+
 // reusable Button
 enum ButtonType { filled, outlined }
 
@@ -52,7 +51,7 @@ class CustomElevatedButton extends StatelessWidget {
           child: Text(
             text,
             style:
-            textStyle ??
+                textStyle ??
                 TextStyle(
                   color: Colors.blue[700],
                   fontSize: 16,

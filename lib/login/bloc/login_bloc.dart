@@ -16,9 +16,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final AuthRepository authRepository;
 
   FutureOr<void> _authInitialize(
-      LoginInitializeEvent event,
-      Emitter<LoginState> emit,
-      ) async {
+    LoginInitializeEvent event,
+    Emitter<LoginState> emit,
+  ) async {
     try {
       emit(LoginLoading());
 
@@ -38,7 +38,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           responseBodyMap = response.body as Map<String, dynamic>;
         } else if (response.bodyString.isNotEmpty) {
           responseBodyMap =
-          jsonDecode(response.bodyString) as Map<String, dynamic>;
+              jsonDecode(response.bodyString) as Map<String, dynamic>;
         } else {
           emit(LoginError(message: 'Something went wrong!'));
           return;
@@ -56,7 +56,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             ),
           );
         } else if (loginResponse.status == 0 &&
-            loginResponse.message.toLowerCase().contains('user record not available')) {
+            loginResponse.message.toLowerCase().contains(
+              'user record not available',
+            )) {
           // Specific case: user record not available
           emit(LoginError(message: 'User record not available.'));
         } else {

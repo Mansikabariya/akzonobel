@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:akzonobel/custom_widgets/elevated_button.dart';
 import 'package:akzonobel/custom_widgets/text_field.dart';
 import 'package:akzonobel/home_page/home_screen.dart';
+import 'package:akzonobel/l10n/l10n.dart';
 import 'package:akzonobel/login/bloc/login_bloc.dart';
 import 'package:akzonobel/login/bloc/login_event.dart';
 import 'package:akzonobel/login/bloc/login_state.dart';
@@ -59,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             const SizedBox(height: 20),
             Text(
-              'Log in to your account',
+              context.l10n!.loginToYourAccount,
               style: Theme.of(context).textTheme.displayMedium,
             ),
             const SizedBox(height: 120),
@@ -68,9 +69,19 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(
                   height: 45,
                   child: CustomTextFormField(
-                    hint: 'Enter email',
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Password field is required';
+                      }
+                      // Optional: Check for valid email format
+                      if (!RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$').hasMatch(value)) {
+                        return 'Enter a valid password';
+                      }
+                      return '';
+                    },
+                    hint: context.l10n!.email,
                     controller: emailController,
-                    label: 'Email',
+                    label: context.l10n!.email,
                     icon: Icon(Icons.email, size: 18, color: Colors.grey[800]),
                   ),
                 ),
@@ -78,19 +89,29 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(
                   height: 45,
                   child: CustomTextFormField(
-                    hint: 'Enter Password',
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Email field is required';
+                      }
+                      // Optional: Check for valid email format
+                      if (!RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$').hasMatch(value)) {
+                        return 'Enter a valid email';
+                      }
+                      return '';
+                    },
+                    hint: context.l10n!.password,
                     controller: passwordController,
                     isPassword: true,
-                    label: 'Password',
+                    label: context.l10n!.password,
                     icon: Icon(Icons.lock, size: 18, color: Colors.grey[800]),
                   ),
                 ),
                 const SizedBox(height: 80),
                 CustomElevatedButton(
-                  onPressed: (){
+                  onPressed: () {
                     callLoginAPI();
                   },
-                  text: 'SIGN IN',
+                  text: context.l10n!.signIn,
                   height: 45,
                   textStyle: Theme.of(context).textTheme.headlineSmall,
                   buttonType: ButtonType.filled,
@@ -105,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: InkWell(
                           onTap: () {},
                           child: Text(
-                            'Forgot Password?',
+                            context.l10n!.forgotPassword,
                             style: Theme.of(context).textTheme.labelMedium,
                           ),
                         ),
@@ -119,14 +140,14 @@ class _LoginScreenState extends State<LoginScreen> {
             Padding(
               padding: EdgeInsets.only(top: 50),
               child: Text(
-                'Don\'t Have An Account?',
+                context.l10n!.noAccount,
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
             ),
             const SizedBox(height: 30),
             CustomElevatedButton(
               onPressed: () {},
-              text: 'SIGN UP',
+              text: context.l10n!.signUp,
               height: 45,
               textStyle: Theme.of(context).textTheme.titleSmall,
               buttonType: ButtonType.outlined,

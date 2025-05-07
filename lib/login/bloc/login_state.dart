@@ -2,7 +2,6 @@ import 'package:akzonobel/login/login_details/user_data.dart';
 
 abstract class LoginState {}
 
-
 class LoginInitial extends LoginState {}
 
 class LoginLoading extends LoginState {}

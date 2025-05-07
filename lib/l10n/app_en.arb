@@ -1,0 +1,10 @@
+{
+  "@@locale": "en",
+  "loginToYourAccount": "Log in to your account",
+  "email": "Email",
+  "password": "Password",
+  "signIn": "SIGN IN",
+  "forgotPassword": "Forgot Password?",
+  "noAccount": "Don't Have An Account?",
+  "signUp": "SIGN UP"
+}

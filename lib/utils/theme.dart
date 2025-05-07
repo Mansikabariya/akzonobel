@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-class TTextTheme
-{
+class TTextTheme {
   TTextTheme._();
 
   static TextTheme lightTheme = TextTheme(
@@ -72,9 +71,7 @@ class TTextTheme
   );
 }
 
-
-class TElevatedButtonTheme
-{
+class TElevatedButtonTheme {
   TElevatedButtonTheme._();
 
   static ElevatedButtonThemeData lightButtonTheme = ElevatedButtonThemeData(
