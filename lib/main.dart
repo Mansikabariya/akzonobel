@@ -1,25 +1,56 @@
+import 'package:akzonobel/core/service/api_service.dart';
+import 'package:akzonobel/login/repository/login_repository.dart';
 import 'package:akzonobel/utils/route_utils.dart';
 import 'package:akzonobel/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'core/local_storage/local_storage.dart';
 import 'home_page/home_screen.dart';
 import 'login/bloc/login_bloc.dart';
 import 'login/login_page.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize LocalStorage
+  await LocalStorage.initialize();
+  final appApiService = AppApiService.create(localStorage: LocalStorage.shared);
+
   runApp(
-    MultiBlocProvider(
+    
+    MultiRepositoryProvider(
       providers: [
-        BlocProvider(create: (_) => LoginBloc()),
+        // Provide the AppApiService instance
+        RepositoryProvider<AppApiService>(
+          create: (context) => appApiService,
+          // Note: If AppApiService doesn't need disposal logic, lazy: true (default) is fine.
+        ),
+        // Provide the AuthRepository instance
+        RepositoryProvider<AuthRepository>(
+          create: (context) => AuthRepository(
+            // Read the AppApiService that was provided just above
+            appApiService: RepositoryProvider.of<AppApiService>(context),
+            // Use the globally initialized LocalStorage
+            localStorage: LocalStorage.shared,
+          ),
+        ),
       ],
-      child: const MyApp(),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create:
+                (context) =>
+                    LoginBloc(authRepository: RepositoryProvider.of(context)),
+          ),
+        ],
+        child: const MyApp(),
+      ),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +62,10 @@ class MyApp extends StatelessWidget {
         elevatedButtonTheme: TElevatedButtonTheme.lightButtonTheme,
       ),
       debugShowCheckedModeBanner: false,
-      home:  LoginScreen(),
+      home: const LoginScreen()
+          // LocalStorage.shared.isLoggedIn
+          //     ? const HomeScreen()
+          //     : const LoginScreen(),
     );
   }
 }

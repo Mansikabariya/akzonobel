@@ -1,10 +1,14 @@
 abstract class LoginEvent {}
 
-class LoginButtonPressed extends LoginEvent {
+class LoginInitializeEvent extends LoginEvent{
+  LoginInitializeEvent({
+    required this.email,
+    required this.password,
+    required this.fullName,
+
+});
 
   final String email;
   final String password;
-
-  LoginButtonPressed({required this.email, required this.password});
-
+  final String fullName;
 }

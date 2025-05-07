@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:akzonobel/custom_widgets/elevated_button.dart';
 import 'package:akzonobel/custom_widgets/text_field.dart';
 import 'package:akzonobel/home_page/home_screen.dart';
@@ -20,30 +22,29 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
 
-  void handleLogin(BuildContext context) {
-    final String enteredEmail = emailController.text.trim();
-    final String enteredPassword = passwordController.text.trim();
-
-    context.read<LoginBloc>().add(
-      LoginButtonPressed(email: enteredEmail, password: enteredPassword),
-    );
-  }
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
+        log('Current State: $state');
         if (state is LoginLoading) {
-          CircularProgressIndicator();
-        } else if (state is LoginSuccess) {
-          AppUtils.instance.showSnackBar(context, state.successMessage);
-          Navigator.pushReplacementNamed(
-            context, HomeScreen.route,
+          // Show loading indicator (optional)
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) => Center(child: CircularProgressIndicator()),
           );
+        } else if (state is LoginSuccess) {
+          Navigator.of(context).pop();
+          AppUtils.instance.showSnackBar(context, state.successMessage);
+          Navigator.pushReplacementNamed(context, HomeScreen.route);
         } else if (state is LoginError) {
+          Navigator.of(context).pop();
           AppUtils.instance.showSnackBar(context, state.message);
         }
       },
@@ -86,7 +87,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 80),
                 CustomElevatedButton(
-                  onPressed: () => handleLogin(context),
+                  onPressed: (){
+                    callLoginAPI();
+                  },
                   text: 'SIGN IN',
                   height: 45,
                   textStyle: Theme.of(context).textTheme.headlineSmall,
@@ -133,5 +136,14 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-}
 
+  void callLoginAPI() {
+    context.read<LoginBloc>().add(
+      LoginInitializeEvent(
+        email: emailController.text,
+        password: passwordController.text,
+        fullName: '',
+      ),
+    );
+  }
+}

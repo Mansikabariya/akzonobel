@@ -62,13 +62,14 @@ class _HomeScreenState extends State<HomeScreen>
               icon: Icon(Icons.notifications_outlined),
             ),
             IconButton(onPressed: () {}, icon: Icon(Icons.chat_bubble_outline)),
-            SizedBox(
-              height: 48,
-              width: 48,
-              child: InkWell(
-                onTap: () {},
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 8, left: 12),
+            // IconButton(onPressed: () {}, icon: Icon(Icons.chat_bubble_outline)),
+            Padding(
+              padding: const EdgeInsets.only(right: 12, left: 12),
+              child: SizedBox(
+                height: 48,
+                width: 24,
+                child: InkWell(
+                  onTap: () {},
                   child: CircleAvatar(
                     radius: 12,
                     backgroundImage: AssetImage(Images.profile),
