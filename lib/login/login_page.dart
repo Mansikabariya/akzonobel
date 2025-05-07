@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:math';
 
 import 'package:akzonobel/custom_widgets/elevated_button.dart';
 import 'package:akzonobel/custom_widgets/text_field.dart';
@@ -23,18 +24,15 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-
+    final l10n = context.l10n;
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
-        log('Current State: $state');
         if (state is LoginLoading) {
-          // Show loading indicator (optional)
           showDialog(
             context: context,
             barrierDismissible: false,
@@ -60,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             const SizedBox(height: 20),
             Text(
-              context.l10n!.loginToYourAccount,
+              l10n!.loginToYourAccount,
               style: Theme.of(context).textTheme.displayMedium,
             ),
             const SizedBox(height: 120),
@@ -69,19 +67,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(
                   height: 45,
                   child: CustomTextFormField(
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Password field is required';
-                      }
-                      // Optional: Check for valid email format
-                      if (!RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$').hasMatch(value)) {
-                        return 'Enter a valid password';
-                      }
-                      return '';
-                    },
-                    hint: context.l10n!.email,
                     controller: emailController,
-                    label: context.l10n!.email,
+                    hint: l10n.email,
+                    label: l10n.email,
                     icon: Icon(Icons.email, size: 18, color: Colors.grey[800]),
                   ),
                 ),
@@ -89,20 +77,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(
                   height: 45,
                   child: CustomTextFormField(
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Email field is required';
-                      }
-                      // Optional: Check for valid email format
-                      if (!RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$').hasMatch(value)) {
-                        return 'Enter a valid email';
-                      }
-                      return '';
-                    },
-                    hint: context.l10n!.password,
                     controller: passwordController,
+                    hint: l10n.password,
+                    label: l10n.password,
                     isPassword: true,
-                    label: context.l10n!.password,
                     icon: Icon(Icons.lock, size: 18, color: Colors.grey[800]),
                   ),
                 ),
@@ -111,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   onPressed: () {
                     callLoginAPI();
                   },
-                  text: context.l10n!.signIn,
+                  text: l10n.signIn,
                   height: 45,
                   textStyle: Theme.of(context).textTheme.headlineSmall,
                   buttonType: ButtonType.filled,
@@ -126,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: InkWell(
                           onTap: () {},
                           child: Text(
-                            context.l10n!.forgotPassword,
+                            l10n.forgotPassword,
                             style: Theme.of(context).textTheme.labelMedium,
                           ),
                         ),
@@ -140,14 +118,14 @@ class _LoginScreenState extends State<LoginScreen> {
             Padding(
               padding: EdgeInsets.only(top: 50),
               child: Text(
-                context.l10n!.noAccount,
+                l10n.noAccount,
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
             ),
             const SizedBox(height: 30),
             CustomElevatedButton(
               onPressed: () {},
-              text: context.l10n!.signUp,
+              text: l10n.signUp,
               height: 45,
               textStyle: Theme.of(context).textTheme.titleSmall,
               buttonType: ButtonType.outlined,

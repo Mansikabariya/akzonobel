@@ -7,7 +7,6 @@ class CustomTextFormField extends StatefulWidget {
   final bool isPassword;
   final TextEditingController controller;
   final String hint;
-  final String Function(String?)? validator;
 
   const CustomTextFormField({
     super.key,
@@ -16,7 +15,6 @@ class CustomTextFormField extends StatefulWidget {
     required this.icon,
     this.isPassword = false,
     required this.controller,
-    required this.validator,
   });
 
   @override
@@ -33,7 +31,6 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       child: TextFormField(
         style: TextStyle(height: 0.7),
         controller: widget.controller,
-        validator: widget.validator,
         obscureText: widget.isPassword ? _obscureText : false,
         cursorColor: Colors.black,
         cursorHeight: 20,

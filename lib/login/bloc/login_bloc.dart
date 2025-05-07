@@ -10,12 +10,12 @@ import 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc({required this.authRepository}) : super(LoginInitial()) {
-    on<LoginInitializeEvent>(_authInitialize);
+    on<LoginInitializeEvent>(authInitialize);
   }
 
   final AuthRepository authRepository;
 
-  FutureOr<void> _authInitialize(
+  FutureOr<void> authInitialize(
     LoginInitializeEvent event,
     Emitter<LoginState> emit,
   ) async {
