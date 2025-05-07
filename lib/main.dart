@@ -1,4 +1,5 @@
 import 'package:akzonobel/core/service/api_service.dart';
+import 'package:akzonobel/l10n/l10n.dart';
 import 'package:akzonobel/login/repository/login_repository.dart';
 import 'package:akzonobel/utils/route_utils.dart';
 import 'package:akzonobel/utils/theme.dart';
@@ -61,6 +62,8 @@ class MyApp extends StatelessWidget {
         textTheme: TTextTheme.lightTheme,
         elevatedButtonTheme: TElevatedButtonTheme.lightButtonTheme,
       ),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       debugShowCheckedModeBanner: false,
       home: const LoginScreen()
           // LocalStorage.shared.isLoggedIn

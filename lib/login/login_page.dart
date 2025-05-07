@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:akzonobel/custom_widgets/elevated_button.dart';
 import 'package:akzonobel/custom_widgets/text_field.dart';
 import 'package:akzonobel/home_page/home_screen.dart';
+import 'package:akzonobel/l10n/l10n.dart';
 import 'package:akzonobel/login/bloc/login_bloc.dart';
 import 'package:akzonobel/login/bloc/login_event.dart';
 import 'package:akzonobel/login/bloc/login_state.dart';
@@ -28,7 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-
+    final l10n = context.l10n;
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
         log('Current State: $state');
@@ -59,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             const SizedBox(height: 20),
             Text(
-              'Log in to your account',
+              l10n!.loginTitle,
               style: Theme.of(context).textTheme.displayMedium,
             ),
             const SizedBox(height: 120),
@@ -68,9 +69,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(
                   height: 45,
                   child: CustomTextFormField(
-                    hint: 'Enter email',
+                    hint: l10n.email,
                     controller: emailController,
-                    label: 'Email',
+                    label: l10n.email,
                     icon: Icon(Icons.email, size: 18, color: Colors.grey[800]),
                   ),
                 ),
@@ -78,10 +79,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(
                   height: 45,
                   child: CustomTextFormField(
-                    hint: 'Enter Password',
+                    hint: l10n.password,
                     controller: passwordController,
                     isPassword: true,
-                    label: 'Password',
+                    label: l10n.password,
                     icon: Icon(Icons.lock, size: 18, color: Colors.grey[800]),
                   ),
                 ),
@@ -90,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   onPressed: (){
                     callLoginAPI();
                   },
-                  text: 'SIGN IN',
+                  text: l10n.signIn,
                   height: 45,
                   textStyle: Theme.of(context).textTheme.headlineSmall,
                   buttonType: ButtonType.filled,
@@ -105,7 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: InkWell(
                           onTap: () {},
                           child: Text(
-                            'Forgot Password?',
+                            l10n.forgotPassword,
                             style: Theme.of(context).textTheme.labelMedium,
                           ),
                         ),
@@ -119,14 +120,14 @@ class _LoginScreenState extends State<LoginScreen> {
             Padding(
               padding: EdgeInsets.only(top: 50),
               child: Text(
-                'Don\'t Have An Account?',
+                l10n.noAccount,
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
             ),
             const SizedBox(height: 30),
             CustomElevatedButton(
               onPressed: () {},
-              text: 'SIGN UP',
+              text: l10n.signUp,
               height: 45,
               textStyle: Theme.of(context).textTheme.titleSmall,
               buttonType: ButtonType.outlined,
