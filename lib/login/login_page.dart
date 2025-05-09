@@ -1,6 +1,3 @@
-import 'dart:developer';
-import 'dart:math';
-
 import 'package:akzonobel/custom_widgets/elevated_button.dart';
 import 'package:akzonobel/custom_widgets/text_field.dart';
 import 'package:akzonobel/home_page/home_screen.dart';
@@ -41,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
         } else if (state is LoginSuccess) {
           Navigator.of(context).pop();
           AppUtils.instance.showSnackBar(context, state.successMessage);
-          Navigator.pushReplacementNamed(context, HomeScreen.route);
+          Navigator.pushReplacementNamed(context, HomeScreen.route, arguments: state.data);
         } else if (state is LoginError) {
           Navigator.of(context).pop();
           AppUtils.instance.showSnackBar(context, state.message);
@@ -49,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
       },
       child: Scaffold(
         backgroundColor: AppColors.mainBGColor,
-        resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomInset: false,
         body: Column(
           children: [
             Padding(

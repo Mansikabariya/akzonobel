@@ -1,4 +1,4 @@
-import 'package:akzonobel/login/login_details/user_data.dart';
+import 'package:akzonobel/login/model/user_data.dart';
 
 abstract class LoginState {}
 

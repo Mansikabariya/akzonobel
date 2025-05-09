@@ -6,5 +6,9 @@
   "signIn": "SIGN IN",
   "forgotPassword": "Forgot Password?",
   "noAccount": "Don't Have An Account?",
-  "signUp": "SIGN UP"
+  "signUp": "SIGN UP",
+  "upcomingevents": "Upcoming Events",
+  "pastevents": "Past Events",
+  "noupcomingevents": "There are no upcoming events at this time.",
+  "noPastEvents": "No any Past Events Available."
 }

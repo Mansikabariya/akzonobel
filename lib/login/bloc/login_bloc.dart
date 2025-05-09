@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'package:akzonobel/core/local_storage/local_storage.dart';
-import 'package:akzonobel/login/login_details/login_details_response.dart';
+import 'package:akzonobel/login/model/login_details_response.dart';
 import 'package:akzonobel/login/repository/login_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'login_event.dart';

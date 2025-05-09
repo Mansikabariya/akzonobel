@@ -42,10 +42,10 @@ class TTextTheme {
     ),
 
     labelMedium: TextStyle(
-      color: Color(0xFF0D47A1),
+      color: Colors.grey,
       fontSize: 14,
       fontFamily: 'Poppins',
-      fontWeight: FontWeight.w300,
+      // fontWeight: FontWeight.w300,
     ),
 
     titleMedium: TextStyle(

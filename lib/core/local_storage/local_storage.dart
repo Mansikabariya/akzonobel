@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
-
-import 'package:akzonobel/login/login_details/user_data.dart';
+import 'package:akzonobel/login/model/user_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalStorage {
@@ -37,4 +36,9 @@ class LocalStorage {
   }
 
   bool get isLoggedIn => getUserData() != null;
+
+  String getUserToken() {
+    final userData = getUserData();
+    return userData?.token ?? '';
+  }
 }

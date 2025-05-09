@@ -42,4 +42,27 @@ final class _$AppApiService extends AppApiService {
     );
     return client.send<dynamic, dynamic>($request);
   }
+
+  @override
+  Future<Response<dynamic>> getEvents({
+    required String offset,
+    required String type,
+  }) {
+    final Uri $url = Uri.parse('event/user_event_list');
+    final Map<String, String> $headers = {
+      'content-type': 'application/x-www-form-urlencoded',
+    };
+    final $body = <String, String>{
+      'offset': offset.toString(),
+      'type': type.toString(),
+    };
+    final Request $request = Request(
+      'POST',
+      $url,
+      client.baseUrl,
+      body: $body,
+      headers: $headers,
+    );
+    return client.send<dynamic, dynamic>($request);
+  }
 }

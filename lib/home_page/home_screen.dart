@@ -1,6 +1,11 @@
 import 'dart:developer';
-
+import 'package:akzonobel/home_page/bloc/home_page_bloc.dart';
+import 'package:akzonobel/home_page/bloc/home_page_event.dart';
+import 'package:akzonobel/l10n/l10n.dart';
+import 'package:akzonobel/login/model/user_data.dart';
 import 'package:akzonobel/resources/images.dart';
+import 'package:akzonobel/utils/app_constants.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:akzonobel/utils/app_color.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,7 +14,9 @@ import 'bloc/home_page_state.dart';
 import 'bloc/selected_index_cubit.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({super.key, required this.userData});
+
+  final UserData? userData;
 
   static const route = '/homeScreen';
 
@@ -30,17 +37,28 @@ class _HomeScreenState extends State<HomeScreen>
       length: 2,
       vsync: this,
     ); // Initialize the TabController
+
+    // Initial fetch for Upcoming events (type 1)
+    context.read<HomePageBloc>().add(const FetchEvent(offset: '0', type: '1'));
+
+    // Listen to tab changes and fetch accordingly
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging) return; // Prevent double calls
+
+      final type = _tabController.index == 0 ? '1' : '2';
+      context.read<HomePageBloc>().add(FetchEvent(offset: '0', type: type));
+    });
   }
 
   @override
   void dispose() {
-    _tabController
-        .dispose(); // Dispose of the controller when the widget is disposed
+    _tabController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     log('Default AppBar Height: $appBarHeight');
     return BlocProvider(
       create: (context) => SelectedIndexCubit(),
@@ -53,7 +71,10 @@ class _HomeScreenState extends State<HomeScreen>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('Welcome', style: Theme.of(context).textTheme.titleMedium),
-              Text('Mansi', style: Theme.of(context).textTheme.bodyMedium),
+              Text(
+                widget.userData!.fullName ?? 'Guest',
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
             ],
           ),
           actions: [
@@ -72,7 +93,9 @@ class _HomeScreenState extends State<HomeScreen>
                   onTap: () {},
                   child: CircleAvatar(
                     radius: 12,
-                    backgroundImage: AssetImage(Images.profile),
+                    backgroundImage: CachedNetworkImageProvider(
+                      TheAppConstants.profileImage,
+                    ),
                   ),
                 ),
               ),
@@ -112,70 +135,101 @@ class _HomeScreenState extends State<HomeScreen>
                 child: TabBarView(
                   controller: _tabController,
                   children: [
-                    Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.event_busy_outlined,
-                            color: Colors.blue,
-                            size: 30,
-                          ),
-                          Text(
-                            'There are no upcoming events at this time.',
-                            style: Theme.of(
-                              context,
-                            ).textTheme.titleMedium!.copyWith(fontSize: 14),
-                          ),
-                        ],
-                      ),
-                    ),
-                    // Past Events Tab
-                    ListView.builder(
-                      itemCount: events.length,
-                      itemBuilder: (context, index) {
-                        final event = events[index];
-                        return EventBanner(
-                          title: event.title,
-                          dateRange: event.dateRange,
-                          imagePath: event.imagePath,
-                          location: event.location,
-                        );
+                    // UPCOMING EVENTS TAB
+                    BlocBuilder<HomePageBloc, EventState>(
+                      builder: (context, state) {
+                        if (state is EventLoading && state.type == '1') {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        } else if (state is EventLoaded && state.type == '1') {
+                          if (state.events.isEmpty) {
+                            return Center(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.event_busy_outlined,
+                                    color: Colors.blue,
+                                    size: 30,
+                                  ),
+                                  Text(
+                                    'There are no upcoming events at this time.',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium!
+                                        .copyWith(fontSize: 14),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                          return ListView.builder(
+                            itemCount: state.events.length,
+                            itemBuilder: (context, index) {
+                              final event = state.events[index];
+                              return EventBanner(
+                                title: event.title,
+                                dateRange: event.dateRange,
+                                imagePath: event.imagePath,
+                                location: event.location,
+                              );
+                            },
+                          );
+                        } else if (state is EventError) {
+                          return Center(child: Text(state.errorMessage));
+                        }
+                        return const SizedBox(); // Empty fallback
                       },
                     ),
 
-                    // // Upcoming Events Tab
-                    // if (selectedIndex == 0)
-                    //   Center(
-                    //     child: Column(
-                    //       mainAxisSize: MainAxisSize.min,
-                    //       children: [
-                    //         Icon(
-                    //           Icons.event_busy_outlined,
-                    //           color: Colors.blue,
-                    //           size: 30,
-                    //         ),
-                    //         Text(
-                    //           'There are no upcoming events at this time.',
-                    //           style: Theme.of(context).textTheme.titleMedium!.copyWith(fontSize: 14),
-                    //         ),
-                    //       ],
-                    //     ),
-                    //   )
-                    // else
-                    // // Past Events Tab
-                    //   ListView.builder(
-                    //     itemCount: events.length,
-                    //     itemBuilder: (context, index) {
-                    //       final event = events[index];
-                    //       return EventBanner(
-                    //         title: event.title,
-                    //         dateRange: event.dateRange,
-                    //         imagePath: event.imagePath,
-                    //         location: event.location,
-                    //       );
-                    //     },
-                    //   ),
+                    //PAST EVENTS TAB
+                    BlocBuilder<HomePageBloc, EventState>(
+                      builder: (context, state) {
+                        if (state is EventLoading && state.type == '2') {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        } else if (state is EventLoaded && state.type == '2') {
+                          if (state.events.isEmpty) {
+                            return Center(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.event_busy_outlined,
+                                    color: Colors.blue,
+                                    size: 30,
+                                  ),
+                                  Text(
+                                    'There are no past events at this time.',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium!
+                                        .copyWith(fontSize: 14),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                          return ListView.builder(
+                            itemCount: state.events.length,
+                            itemBuilder: (context, index) {
+                              final event = state.events[index];
+                              return EventBanner(
+                                title: event.title,
+                                dateRange: event.dateRange,
+                                imagePath: event.imagePath,
+                                location: event.location,
+                              );
+                            },
+                          );
+                        } else if (state is EventError) {
+                          return Center(child: Text(state.errorMessage));
+                        }
+                        return const SizedBox(); // Empty fallback
+                      },
+                    ),
                   ],
                 ),
               ),
@@ -205,95 +259,107 @@ class EventBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        child: Container(
-          height: 210,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: Colors.grey[200],
-          ),
+      child: ClipRRect(
+        child: Card(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Stack(
-              children: [
-                Image.asset(
-                  imagePath,
-                  height: 210,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-                Positioned(
-                  top: 137,
-                  left: 0,
-                  right: 0,
-                  child: Container(
-                    height: 23,
-                    color: Colors.black54,
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.calendar_month_outlined,
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                        const SizedBox(width: 5),
-                        Text(
-                          dateRange,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 160,
-                  left: 0,
-                  right: 0,
-                  child: Container(
-                    height: 50,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 3,
-                    ),
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(20),
+              bottomRight: Radius.circular(20),
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
+            child: Container(
+              height: 210,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white,
+              ),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: ClipRRect(
                       borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(10),
-                        bottomRight: Radius.circular(10),
+                        bottomLeft: Radius.circular(17),
+                        bottomRight: Radius.circular(17),
+                        topLeft: Radius.circular(17),
+                        topRight: Radius.circular(17),
+                      ),
+                      child: CachedNetworkImage(
+                        imageUrl: imagePath,
+                        height: 130,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                        errorWidget:
+                            (context, url, error) => CachedNetworkImage(
+                              imageUrl: TheAppConstants.defaultBanner,
+                              fit: BoxFit.cover,
+                            ),
                       ),
                     ),
+                  ),
+                  // const SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8, right: 8, top: 10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          title,
-                          style: Theme.of(
-                            context,
-                          ).textTheme.bodyMedium!.copyWith(fontSize: 16),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                overflow: TextOverflow.ellipsis,
+                                title,
+                                style: Theme.of(
+                                  context,
+                                ).textTheme.bodyMedium!.copyWith(fontSize: 16),
+                              ),
+                            ),
+                          ],
                         ),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             const Icon(Icons.location_on_outlined, size: 16),
                             const SizedBox(width: 4),
-                            Text(
-                              location,
-                              style: Theme.of(
-                                context,
-                              ).textTheme.labelMedium!.copyWith(fontSize: 12),
+                            Expanded(
+                              child: Text(
+                                location,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 2,
+                                style: Theme.of(
+                                  context,
+                                ).textTheme.labelMedium!.copyWith(fontSize: 12, color: Colors.grey),
+                              ),
+                            ),
+                            const SizedBox(width: 42),
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.calendar_month_outlined,
+                                  color: Colors.black,
+                                  size: 20,
+                                ),
+                                const SizedBox(width: 5),
+                                Text(
+                                  dateRange,
+                                  style: const TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 12,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
                       ],
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

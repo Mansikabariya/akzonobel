@@ -1,36 +1,38 @@
 import 'package:akzonobel/resources/images.dart';
+import 'package:equatable/equatable.dart';
 
 import 'home_page_event.dart';
 
-final List<Event> events = [
-  Event(
-    title: 'Testing event',
-    dateRange: '19 Jul | 23 Jul - 2024',
-    imagePath: Images.banner,
-    location: 'Ahmedabad',
-  ),
-  Event(
-    title: 'Test event',
-    dateRange: '15 Feb | 18 Feb - 2025',
-    imagePath: Images.banner_2,
-    location: 'Intelivita,Ahmedabad',
-  ),
-  Event(
-    title: 'Test event',
-    dateRange: '15 Feb | 18 Feb - 2025',
-    imagePath: Images.banner_3,
-    location: 'Intelivita,Ahmedabad',
-  ),
-  Event(
-    title: 'Testing event',
-    dateRange: '19 Jul | 23 Jul - 2024',
-    imagePath: Images.banner_4,
-    location: 'Ahmedabad',
-  ),
-  Event(
-    title: 'Testing event',
-    dateRange: '19 Jul | 23 Jul - 2024',
-    imagePath: Images.banner_5,
-    location: 'Ahmedabad',
-  ),
-];
+class EventState extends Equatable
+{
+  const EventState();
+  @override
+  List<Object?> get props => [];
+}
+
+
+class EventInitial extends EventState {}
+
+class EventLoading extends EventState{
+  const EventLoading({required this.type});
+  final String type;
+}
+
+class EventLoaded extends EventState {
+  const EventLoaded({required this.events, required this.type});
+
+  final List<Event> events;
+  final String type;
+
+  @override
+  List<Object?> get props => [events, type];
+}
+
+class EventError extends EventState {
+  const EventError({required this.errorMessage});
+  final String errorMessage;
+
+  @override
+  List<Object?> get props => [errorMessage];
+}
+
