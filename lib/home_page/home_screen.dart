@@ -329,14 +329,14 @@ class EventBanner extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            const Icon(Icons.location_on, size: 16, color: Colors.grey),
+                            const Icon(Icons.location_on, size: 16, color: Colors.black54),
                             const SizedBox(width: 5),
                             Expanded(
                               child: Text(
                                 location,
                                 overflow: TextOverflow.ellipsis,
                                 style: Theme.of(context).textTheme.labelMedium!
-                                    .copyWith(fontSize: 12, color: Colors.grey),
+                                    .copyWith(fontSize: 12, color: Colors.black54),
                               ),
                             ),
                           ],
@@ -346,14 +346,14 @@ class EventBanner extends StatelessWidget {
                           children: [
                             const Icon(
                               Icons.event,
-                              color: Colors.grey,
+                              color: Colors.black54,
                               size: 16,
                             ),
                             const SizedBox(width: 5),
                             Text(
                               'Start: $startDate',
                               style: const TextStyle(
-                                color: Colors.grey,
+                                color: Colors.black54,
                                 fontSize: 12,
                                 // fontWeight: FontWeight.bold,
                               ),
@@ -365,14 +365,14 @@ class EventBanner extends StatelessWidget {
                           children: [
                             const Icon(
                               Icons.event_available,
-                              color: Colors.grey,
+                              color: Colors.black54,
                               size: 16,
                             ),
                             const SizedBox(width: 5),
                             Text(
                               'End: $endDate',
                               style: const TextStyle(
-                                color: Colors.grey,
+                                color: Colors.black54,
                                 fontSize: 12,
                                 // fontWeight: FontWeight.bold,
                               ),
