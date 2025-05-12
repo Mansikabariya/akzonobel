@@ -83,7 +83,6 @@ class _HomeScreenState extends State<HomeScreen>
               icon: Icon(Icons.notifications_outlined),
             ),
             IconButton(onPressed: () {}, icon: Icon(Icons.chat_bubble_outline)),
-            // IconButton(onPressed: () {}, icon: Icon(Icons.chat_bubble_outline)),
             Padding(
               padding: const EdgeInsets.only(right: 12, left: 12),
               child: SizedBox(
@@ -94,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen>
                   child: CircleAvatar(
                     radius: 12,
                     backgroundImage: CachedNetworkImageProvider(
-                      TheAppConstants.profileImage,
+                      widget.userData!.profilePicture ?? '',
                     ),
                   ),
                 ),
@@ -170,7 +169,9 @@ class _HomeScreenState extends State<HomeScreen>
                               final event = state.events[index];
                               return EventBanner(
                                 title: event.title,
-                                dateRange: event.dateRange,
+                                // dateRange: event.dateRange,
+                                startDate: event.startDate,
+                                endDate: event.endDate,
                                 imagePath: event.imagePath,
                                 location: event.location,
                               );
@@ -218,7 +219,9 @@ class _HomeScreenState extends State<HomeScreen>
                               final event = state.events[index];
                               return EventBanner(
                                 title: event.title,
-                                dateRange: event.dateRange,
+                                // dateRange: event.dateRange,
+                                startDate: event.startDate,
+                                endDate: event.endDate,
                                 imagePath: event.imagePath,
                                 location: event.location,
                               );
@@ -243,14 +246,18 @@ class _HomeScreenState extends State<HomeScreen>
 
 class EventBanner extends StatelessWidget {
   final String imagePath;
-  final String dateRange;
+  // final String dateRange;
+  final String startDate;
+  final String endDate;
   final String title;
   final String location;
 
   const EventBanner({
     super.key,
     required this.imagePath,
-    required this.dateRange,
+    // required this.dateRange,
+    required this.startDate,
+    required this.endDate,
     required this.title,
     required this.location,
   });
@@ -261,7 +268,9 @@ class EventBanner extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: ClipRRect(
         child: Card(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
           child: ClipRRect(
             borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(20),
@@ -270,38 +279,35 @@ class EventBanner extends StatelessWidget {
               topRight: Radius.circular(20),
             ),
             child: Container(
-              height: 210,
+              height: 270,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 color: Colors.white,
               ),
               child: Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(17),
-                        bottomRight: Radius.circular(17),
-                        topLeft: Radius.circular(17),
-                        topRight: Radius.circular(17),
-                      ),
-                      child: CachedNetworkImage(
-                        imageUrl: imagePath,
-                        height: 130,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                        errorWidget:
-                            (context, url, error) => CachedNetworkImage(
-                              imageUrl: TheAppConstants.defaultBanner,
-                              fit: BoxFit.cover,
-                            ),
-                      ),
+                  ClipRRect(
+                    borderRadius: BorderRadius.only(
+                      // bottomLeft: Radius.circular(17),
+                      // bottomRight: Radius.circular(17),
+                      topLeft: Radius.circular(17),
+                      topRight: Radius.circular(17),
+                    ),
+                    child: CachedNetworkImage(
+                      imageUrl: imagePath,
+                      height: 160,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      errorWidget:
+                          (context, url, error) => CachedNetworkImage(
+                            imageUrl: TheAppConstants.defaultBanner,
+                            fit: BoxFit.cover,
+                          ),
                     ),
                   ),
                   // const SizedBox(height: 10),
                   Padding(
-                    padding: const EdgeInsets.only(left: 8, right: 8, top: 10),
+                    padding: const EdgeInsets.only(left: 15, right: 8, top: 10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -319,39 +325,57 @@ class EventBanner extends StatelessWidget {
                             ),
                           ],
                         ),
+                        const SizedBox(height: 5),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            const Icon(Icons.location_on_outlined, size: 16),
-                            const SizedBox(width: 4),
+                            const Icon(Icons.location_on, size: 16, color: Colors.grey),
+                            const SizedBox(width: 5),
                             Expanded(
                               child: Text(
                                 location,
                                 overflow: TextOverflow.ellipsis,
-                                maxLines: 2,
-                                style: Theme.of(
-                                  context,
-                                ).textTheme.labelMedium!.copyWith(fontSize: 12, color: Colors.grey),
+                                style: Theme.of(context).textTheme.labelMedium!
+                                    .copyWith(fontSize: 12, color: Colors.grey),
                               ),
                             ),
-                            const SizedBox(width: 42),
-                            Row(
-                              children: [
-                                const Icon(
-                                  Icons.calendar_month_outlined,
-                                  color: Colors.black,
-                                  size: 20,
-                                ),
-                                const SizedBox(width: 5),
-                                Text(
-                                  dateRange,
-                                  style: const TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 12,
-                                    // fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
+                          ],
+                        ),
+                        const SizedBox(height: 5),
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.event,
+                              color: Colors.grey,
+                              size: 16,
+                            ),
+                            const SizedBox(width: 5),
+                            Text(
+                              'Start: $startDate',
+                              style: const TextStyle(
+                                color: Colors.grey,
+                                fontSize: 12,
+                                // fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 5),
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.event_available,
+                              color: Colors.grey,
+                              size: 16,
+                            ),
+                            const SizedBox(width: 5),
+                            Text(
+                              'End: $endDate',
+                              style: const TextStyle(
+                                color: Colors.grey,
+                                fontSize: 12,
+                                // fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ],
                         ),

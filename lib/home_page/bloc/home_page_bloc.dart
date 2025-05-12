@@ -34,7 +34,7 @@ class HomePageBloc extends Bloc<EventsEvent, EventState> {
       } else {
         emit(
           EventError(
-            errorMessage: 'Failed to fetch events. Please try again.',
+            errorMessage: response.body['message'],
           ),
         );
       }

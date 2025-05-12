@@ -17,25 +17,19 @@ class AppUtils {
     ScaffoldMessenger.of(context).removeCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        behavior: SnackBarBehavior.fixed,
+        behavior: SnackBarBehavior.floating,
         backgroundColor: AppColors.toggleBlueColor,
-        content: Row(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 8),
-                child: Text(
-                  message,
-                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                    // color: CricketColors.kWhiteColor,
-                    fontFamily: 'Poppins',
-                  ),
-                ),
-              ),
-            ),
-          ],
+        content: Text(
+          message,
+          style: Theme.of(context).textTheme.bodySmall!.copyWith(
+             color: AppColors.toggleWhiteColor,
+            fontWeight: FontWeight.w500,
+            fontFamily: 'Poppins',
+            fontSize: 12,
+          ),
         ),
         action: action,
+        // duration: const Duration(seconds: 15),
       ),
     );
   }

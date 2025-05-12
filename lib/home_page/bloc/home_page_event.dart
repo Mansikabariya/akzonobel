@@ -6,13 +6,17 @@ import '../model/pass_events/event_data.dart';
 
 class Event {
   final String title;
-  final String dateRange;
+  // final String dateRange;
+  final String startDate;
+  final String endDate;
   final String imagePath;
   final String location;
 
   Event({
     required this.title,
-    required this.dateRange,
+    // required this.dateRange,
+    required this.startDate,
+    required this.endDate,
     required this.imagePath,
     required this.location,
   });
@@ -24,7 +28,7 @@ class Event {
     String formatDate(String dateStr) {
       try {
         DateTime date = DateTime.parse(dateStr);
-        return DateFormat('d MMMM yyyy').format(date);
+        return DateFormat('d MMM yyyy').format(date);
       } catch (e) {
         return dateStr;
       }
@@ -32,7 +36,8 @@ class Event {
 
     String startDate = formatDate(startDateRaw);
     String endDate = formatDate(endDateRaw);
-    String dateRange = '$startDate | $endDate';
+    String startdate = startDate;
+    String enddate = endDate;
 
     String location = '';
     if (json['addresses'] != null && (json['addresses'] as List).isNotEmpty) {
@@ -49,7 +54,9 @@ class Event {
 
     return Event(
       title: json['event_name'] ?? '',
-      dateRange: dateRange,
+      // dateRange: dateRange,
+      startDate: startdate,
+      endDate: enddate,
       imagePath: imagePath,
       location: location,
     );
