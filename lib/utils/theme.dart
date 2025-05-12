@@ -14,6 +14,13 @@ class TTextTheme
       wordSpacing: 3,
     ),
 
+    bodyMedium: TextStyle(
+      color: Colors.black,
+      fontSize: 18,
+      fontFamily: 'Poppins',
+      fontWeight: FontWeight.w500,
+    ),
+
     bodySmall: TextStyle(
       color: Colors.black,
       fontSize: 16,
@@ -42,6 +49,13 @@ class TTextTheme
       fontWeight: FontWeight.w300,
     ),
 
+    titleMedium: TextStyle(
+      color: Colors.grey[700],
+      fontSize: 16,
+      fontFamily: 'Poppins',
+      fontWeight: FontWeight.w200,
+    ),
+
     titleSmall: TextStyle(
       color: Colors.blue[800],
       fontSize: 14,
@@ -55,8 +69,6 @@ class TTextTheme
       fontFamily: 'Poppins',
       fontWeight: FontWeight.w300,
     ),
-
-
   );
 }
 
