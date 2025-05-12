@@ -1,3 +1,4 @@
+import 'package:akzonobel/utils/app_color.dart';
 import 'package:flutter/material.dart';
 
 class TTextTheme {
@@ -80,5 +81,13 @@ class TElevatedButtonTheme {
       backgroundColor: Colors.transparent,
       shadowColor: Colors.transparent,
     ),
+  );
+}
+
+class TAppBarTheme{
+  TAppBarTheme._();
+
+  static AppBarTheme lightAppBarTheme = AppBarTheme(
+    color: AppColors.mainBGColor,
   );
 }

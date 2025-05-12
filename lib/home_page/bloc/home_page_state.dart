@@ -1,4 +1,3 @@
-import 'package:akzonobel/resources/images.dart';
 import 'package:equatable/equatable.dart';
 
 import 'home_page_event.dart';

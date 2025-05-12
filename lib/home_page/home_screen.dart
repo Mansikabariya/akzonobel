@@ -1,9 +1,8 @@
 import 'dart:developer';
 import 'package:akzonobel/home_page/bloc/home_page_bloc.dart';
 import 'package:akzonobel/home_page/bloc/home_page_event.dart';
-import 'package:akzonobel/l10n/l10n.dart';
 import 'package:akzonobel/login/model/user_data.dart';
-import 'package:akzonobel/resources/images.dart';
+import 'package:akzonobel/profile_page/profile_page.dart';
 import 'package:akzonobel/utils/app_constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -58,7 +57,6 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
     log('Default AppBar Height: $appBarHeight');
     return BlocProvider(
       create: (context) => SelectedIndexCubit(),
@@ -89,7 +87,12 @@ class _HomeScreenState extends State<HomeScreen>
                 height: 48,
                 width: 24,
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushReplacementNamed(
+                      context,
+                      ProfileScreen.route,
+                    );
+                  },
                   child: CircleAvatar(
                     radius: 12,
                     backgroundImage: CachedNetworkImageProvider(
@@ -102,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen>
           ],
         ),
         body: DefaultTabController(
-          length: 2, // Number of tabs
+          length: 2,
           child: Column(
             children: [
               TabBar(
@@ -169,7 +172,6 @@ class _HomeScreenState extends State<HomeScreen>
                               final event = state.events[index];
                               return EventBanner(
                                 title: event.title,
-                                // dateRange: event.dateRange,
                                 startDate: event.startDate,
                                 endDate: event.endDate,
                                 imagePath: event.imagePath,
@@ -180,7 +182,7 @@ class _HomeScreenState extends State<HomeScreen>
                         } else if (state is EventError) {
                           return Center(child: Text(state.errorMessage));
                         }
-                        return const SizedBox(); // Empty fallback
+                        return const SizedBox();
                       },
                     ),
 
@@ -219,7 +221,6 @@ class _HomeScreenState extends State<HomeScreen>
                               final event = state.events[index];
                               return EventBanner(
                                 title: event.title,
-                                // dateRange: event.dateRange,
                                 startDate: event.startDate,
                                 endDate: event.endDate,
                                 imagePath: event.imagePath,
@@ -246,7 +247,6 @@ class _HomeScreenState extends State<HomeScreen>
 
 class EventBanner extends StatelessWidget {
   final String imagePath;
-  // final String dateRange;
   final String startDate;
   final String endDate;
   final String title;
@@ -255,7 +255,6 @@ class EventBanner extends StatelessWidget {
   const EventBanner({
     super.key,
     required this.imagePath,
-    // required this.dateRange,
     required this.startDate,
     required this.endDate,
     required this.title,
@@ -266,126 +265,125 @@ class EventBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      child: ClipRRect(
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(20),
-              bottomRight: Radius.circular(20),
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-            ),
-            child: Container(
-              height: 270,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.white,
+      child: Card(
+        elevation: 2,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        child: Column(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
               ),
-              child: Column(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.only(
-                      // bottomLeft: Radius.circular(17),
-                      // bottomRight: Radius.circular(17),
-                      topLeft: Radius.circular(17),
-                      topRight: Radius.circular(17),
-                    ),
-                    child: CachedNetworkImage(
-                      imageUrl: imagePath,
-                      height: 160,
-                      width: double.infinity,
+              child: CachedNetworkImage(
+                imageUrl: imagePath,
+                height: 160,
+                width: double.infinity,
+                fit: BoxFit.cover,
+                errorWidget:
+                    (context, url, error) => CachedNetworkImage(
+                      imageUrl: TheAppConstants.defaultBanner,
                       fit: BoxFit.cover,
-                      errorWidget:
-                          (context, url, error) => CachedNetworkImage(
-                            imageUrl: TheAppConstants.defaultBanner,
-                            fit: BoxFit.cover,
-                          ),
                     ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 4),
+                          child: Text(
+                            overflow: TextOverflow.ellipsis,
+                            title,
+                            style: Theme.of(
+                              context,
+                            ).textTheme.bodyMedium!.copyWith(fontSize: 16),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  // const SizedBox(height: 10),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 15, right: 8, top: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                overflow: TextOverflow.ellipsis,
-                                title,
-                                style: Theme.of(
-                                  context,
-                                ).textTheme.bodyMedium!.copyWith(fontSize: 16),
-                              ),
-                            ),
-                          ],
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 4),
+                        child: const Icon(
+                          Icons.location_on,
+                          size: 16,
+                          color: Colors.black54,
                         ),
-                        const SizedBox(height: 5),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Icon(Icons.location_on, size: 16, color: Colors.black54),
-                            const SizedBox(width: 5),
-                            Expanded(
-                              child: Text(
-                                location,
-                                overflow: TextOverflow.ellipsis,
-                                style: Theme.of(context).textTheme.labelMedium!
-                                    .copyWith(fontSize: 12, color: Colors.black54),
-                              ),
-                            ),
-                          ],
+                      ),
+                      Expanded(
+                        child: Text(
+                          location,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.labelMedium!
+                              .copyWith(fontSize: 12, color: Colors.black54),
                         ),
-                        const SizedBox(height: 5),
-                        Row(
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 5),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             const Icon(
                               Icons.event,
                               color: Colors.black54,
                               size: 16,
                             ),
-                            const SizedBox(width: 5),
+                            const SizedBox(width: 4),
                             Text(
                               'Start: $startDate',
                               style: const TextStyle(
                                 color: Colors.black54,
                                 fontSize: 12,
-                                // fontWeight: FontWeight.bold,
                               ),
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ],
                         ),
-                        const SizedBox(height: 5),
-                        Row(
+                      ),
+                      Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             const Icon(
                               Icons.event_available,
                               color: Colors.black54,
                               size: 16,
                             ),
-                            const SizedBox(width: 5),
-                            Text(
-                              'End: $endDate',
-                              style: const TextStyle(
-                                color: Colors.black54,
-                                fontSize: 12,
-                                // fontWeight: FontWeight.bold,
+                            const SizedBox(width: 4),
+                            Flexible(
+                              child: Text(
+                                'End: $endDate',
+                                style: const TextStyle(
+                                  color: Colors.black54,
+                                  fontSize: 12,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.right,
                               ),
                             ),
                           ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
-          ),
+          ],
         ),
       ),
     );

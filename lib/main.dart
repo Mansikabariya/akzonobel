@@ -70,6 +70,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         textTheme: TTextTheme.lightTheme,
         elevatedButtonTheme: TElevatedButtonTheme.lightButtonTheme,
+        appBarTheme: TAppBarTheme.lightAppBarTheme,
       ),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
