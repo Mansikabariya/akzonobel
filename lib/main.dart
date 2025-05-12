@@ -77,8 +77,8 @@ class MyApp extends StatelessWidget {
       supportedLocales: AppLocalizations.supportedLocales,
       debugShowCheckedModeBanner: false,
       home:
-      // LocalStorage.shared.isLoggedIn
-      //     ? HomeScreen(userData: LocalStorage.shared.getUserData(),)
+      // await LocalStorage.shared.isLoggedIn()
+      //     ? HomeScreen(userData: await LocalStorage.shared.getUserData(),)
       //     : const LoginScreen(),
       const LoginScreen(),
 

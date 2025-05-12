@@ -8,6 +8,7 @@ class CustomTextFormField extends StatefulWidget {
   final TextEditingController controller;
   final String hint;
   final TextInputType keyboardType;
+  final String? Function(String?)? validator;
 
   const CustomTextFormField({
     super.key,
@@ -17,6 +18,7 @@ class CustomTextFormField extends StatefulWidget {
     required this.controller,
     this.isPassword = false,
     this.keyboardType = TextInputType.name,
+    this.validator,
   });
 
   @override
@@ -31,29 +33,15 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
     return Padding(
       padding: const EdgeInsets.only(left: 24, right: 24),
       child: TextFormField(
+        validator: widget.validator,
         keyboardType: widget.keyboardType,
         style: TextStyle(fontFamily: 'Poppins'),
         controller: widget.controller,
         obscureText: widget.isPassword ? _obscureText : false,
-        // cursorColor: Colors.black,
-        // cursorHeight: 20,
-        // cursorWidth: 1.5,
-        // textAlignVertical: TextAlignVertical.center,
         decoration: InputDecoration(
-          // hintStyle: TextStyle(color: Colors.blueAccent),
           prefixIcon: widget.icon,
           labelText: widget.label,
           labelStyle: TextStyle(fontFamily: 'Poppins'),
-          // isDense: true,
-          // contentPadding: EdgeInsets.symmetric(
-          //   vertical: 16.0,
-          //   horizontal: 20.0,
-          // ),
-          // focusedBorder: OutlineInputBorder(
-          //   borderSide: BorderSide(color: Colors.blueAccent),
-          //   borderRadius: BorderRadius.circular(25),
-          // ),
-          // focusColor: Colors.red,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
           suffixIcon:
               widget.isPassword

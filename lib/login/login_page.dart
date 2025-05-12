@@ -1,4 +1,3 @@
-import 'package:akzonobel/core/local_storage/local_storage.dart';
 import 'package:akzonobel/custom_widgets/elevated_button.dart';
 import 'package:akzonobel/custom_widgets/text_field.dart';
 import 'package:akzonobel/home_page/home_screen.dart';
@@ -24,6 +23,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -60,52 +60,72 @@ class _LoginScreenState extends State<LoginScreen> {
               style: Theme.of(context).textTheme.displayMedium,
             ),
             const SizedBox(height: 100),
-            Column(
-              children: [
-                CustomTextFormField(
-                  keyboardType: TextInputType.emailAddress,
-                  controller: emailController,
-                  hint: l10n.email,
-                  label: l10n.email,
-                  icon: Icon(Icons.email, size: 18, color: Colors.grey[800]),
-                ),
-                const SizedBox(height: 20),
-                CustomTextFormField(
-                  controller: passwordController,
-                  hint: l10n.password,
-                  label: l10n.password,
-                  isPassword: true,
-                  icon: Icon(Icons.lock, size: 18, color: Colors.grey[800]),
-                ),
-                const SizedBox(height: 40),
-                CustomElevatedButton(
-                  onPressed: () {
-                    callLoginAPI();
-                  },
-                  text: l10n.signIn,
-                  height: 45,
-                  textStyle: Theme.of(context).textTheme.headlineSmall,
-                  buttonType: ButtonType.filled,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 24, top: 4),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 2),
-                        child: InkWell(
-                          onTap: () {},
-                          child: Text(
-                            l10n.forgotPassword,
-                            style: Theme.of(context).textTheme.headlineMedium,
+            Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  CustomTextFormField(
+                    keyboardType: TextInputType.emailAddress,
+                    controller: emailController,
+                    hint: l10n.email,
+                    label: l10n.email,
+                    icon: Icon(Icons.email, size: 18, color: Colors.grey[800]),
+                    validator: (value) {
+                      if(value == null || value.trim().isEmpty)
+                        {
+                          return 'This field is required';
+                        }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  CustomTextFormField(
+                    controller: passwordController,
+                    hint: l10n.password,
+                    label: l10n.password,
+                    isPassword: true,
+                    icon: Icon(Icons.lock, size: 18, color: Colors.grey[800]),
+                    validator: (value) {
+                      if(value == null || value.trim().isEmpty)
+                      {
+                        return 'This field is required';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 40),
+                  CustomElevatedButton(
+                    onPressed: () {
+                      if(_formKey.currentState!.validate())
+                        {
+                          callLoginAPI();
+                        }
+                    },
+                    text: l10n.signIn,
+                    height: 45,
+                    textStyle: Theme.of(context).textTheme.headlineSmall,
+                    buttonType: ButtonType.filled,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 24, top: 4),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 2),
+                          child: InkWell(
+                            onTap: () {},
+                            child: Text(
+                              l10n.forgotPassword,
+                              style: Theme.of(context).textTheme.headlineMedium,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
 
             Padding(
