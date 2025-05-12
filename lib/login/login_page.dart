@@ -1,3 +1,4 @@
+import 'package:akzonobel/core/local_storage/local_storage.dart';
 import 'package:akzonobel/custom_widgets/elevated_button.dart';
 import 'package:akzonobel/custom_widgets/text_field.dart';
 import 'package:akzonobel/home_page/home_screen.dart';
@@ -50,38 +51,33 @@ class _LoginScreenState extends State<LoginScreen> {
         body: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 50),
+              padding: const EdgeInsets.only(top: 52),
               child: Image.asset(Images.logo),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
             Text(
               l10n!.loginToYourAccount,
               style: Theme.of(context).textTheme.displayMedium,
             ),
-            const SizedBox(height: 120),
+            const SizedBox(height: 100),
             Column(
               children: [
-                SizedBox(
-                  height: 45,
-                  child: CustomTextFormField(
-                    controller: emailController,
-                    hint: l10n.email,
-                    label: l10n.email,
-                    icon: Icon(Icons.email, size: 18, color: Colors.grey[800]),
-                  ),
+                CustomTextFormField(
+                  keyboardType: TextInputType.emailAddress,
+                  controller: emailController,
+                  hint: l10n.email,
+                  label: l10n.email,
+                  icon: Icon(Icons.email, size: 18, color: Colors.grey[800]),
                 ),
                 const SizedBox(height: 20),
-                SizedBox(
-                  height: 45,
-                  child: CustomTextFormField(
-                    controller: passwordController,
-                    hint: l10n.password,
-                    label: l10n.password,
-                    isPassword: true,
-                    icon: Icon(Icons.lock, size: 18, color: Colors.grey[800]),
-                  ),
+                CustomTextFormField(
+                  controller: passwordController,
+                  hint: l10n.password,
+                  label: l10n.password,
+                  isPassword: true,
+                  icon: Icon(Icons.lock, size: 18, color: Colors.grey[800]),
                 ),
-                const SizedBox(height: 80),
+                const SizedBox(height: 40),
                 CustomElevatedButton(
                   onPressed: () {
                     callLoginAPI();
@@ -92,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   buttonType: ButtonType.filled,
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(right: 25, top: 5),
+                  padding: const EdgeInsets.only(right: 24, top: 4),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -102,7 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           onTap: () {},
                           child: Text(
                             l10n.forgotPassword,
-                            style: Theme.of(context).textTheme.labelMedium,
+                            style: Theme.of(context).textTheme.headlineMedium,
                           ),
                         ),
                       ),
@@ -119,7 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 8),
             CustomElevatedButton(
               onPressed: () {},
               text: l10n.signUp,

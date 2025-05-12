@@ -45,6 +45,7 @@ dependencies:
   flutter_intl: ^0.0.1
   easy_localization: ^3.0.7+1
   cached_network_image: ^3.4.1
+  flutter_secure_storage: ^9.2.4
 
 dev_dependencies:
   flutter_test:

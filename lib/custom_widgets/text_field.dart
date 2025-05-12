@@ -7,14 +7,16 @@ class CustomTextFormField extends StatefulWidget {
   final bool isPassword;
   final TextEditingController controller;
   final String hint;
+  final TextInputType keyboardType;
 
   const CustomTextFormField({
     super.key,
     required this.label,
     required this.hint,
     required this.icon,
-    this.isPassword = false,
     required this.controller,
+    this.isPassword = false,
+    this.keyboardType = TextInputType.name,
   });
 
   @override
@@ -27,29 +29,32 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 25, right: 25),
+      padding: const EdgeInsets.only(left: 24, right: 24),
       child: TextFormField(
-        style: TextStyle(height: 0.7),
+        keyboardType: widget.keyboardType,
+        style: TextStyle(fontFamily: 'Poppins'),
         controller: widget.controller,
         obscureText: widget.isPassword ? _obscureText : false,
-        cursorColor: Colors.black,
-        cursorHeight: 20,
-        cursorWidth: 1.5,
-        textAlignVertical: TextAlignVertical.center,
+        // cursorColor: Colors.black,
+        // cursorHeight: 20,
+        // cursorWidth: 1.5,
+        // textAlignVertical: TextAlignVertical.center,
         decoration: InputDecoration(
+          // hintStyle: TextStyle(color: Colors.blueAccent),
           prefixIcon: widget.icon,
           labelText: widget.label,
-          labelStyle: Theme.of(context).textTheme.labelSmall,
-          isDense: true,
-          contentPadding: EdgeInsets.symmetric(
-            vertical: 16.0,
-            horizontal: 20.0,
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(25),
-          ),
-          focusColor: Colors.blueAccent[600],
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
+          labelStyle: TextStyle(fontFamily: 'Poppins'),
+          // isDense: true,
+          // contentPadding: EdgeInsets.symmetric(
+          //   vertical: 16.0,
+          //   horizontal: 20.0,
+          // ),
+          // focusedBorder: OutlineInputBorder(
+          //   borderSide: BorderSide(color: Colors.blueAccent),
+          //   borderRadius: BorderRadius.circular(25),
+          // ),
+          // focusColor: Colors.red,
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
           suffixIcon:
               widget.isPassword
                   ? IconButton(

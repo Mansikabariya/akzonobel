@@ -67,6 +67,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       onGenerateRoute: onGeneratesAppRoutes,
       theme: ThemeData(
+        colorScheme: ColorScheme.light(primary: Colors.blue, secondary: Colors.red, tertiary: Colors.yellow),
         useMaterial3: true,
         textTheme: TTextTheme.lightTheme,
         elevatedButtonTheme: TElevatedButtonTheme.lightButtonTheme,
@@ -77,7 +78,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home:
       // LocalStorage.shared.isLoggedIn
-      //     ? const HomeScreen(userData: UserData(),)
+      //     ? HomeScreen(userData: LocalStorage.shared.getUserData(),)
       //     : const LoginScreen(),
       const LoginScreen(),
 

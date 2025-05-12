@@ -34,13 +34,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       body: Column(
         children: [
-          Container(
-            height: 200,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              color: AppColors.toggleWhiteColor,
-            ),
-          ),
+          // Container(
+          //   height: 200,
+          //   width: MediaQuery.of(context).size.width,
+          //   decoration: BoxDecoration(
+          //     color: AppColors.toggleWhiteColor,
+          //   ),
+          // ),
         ],
       ),
     );

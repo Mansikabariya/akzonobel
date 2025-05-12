@@ -14,7 +14,7 @@ class AuthHeadersInterceptor implements Interceptor {
   @override
   FutureOr<Response<BodyType>> intercept<BodyType>(Chain<BodyType> chain) async {
     final request = chain.request;
-    final token = localStorage.getUserToken();
+    final token = await localStorage.getUserToken();
 
     // Add headers to the request
     request.headers.putIfAbsent('Accept', () => 'application/json');

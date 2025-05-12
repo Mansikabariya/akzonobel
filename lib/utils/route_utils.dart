@@ -24,7 +24,7 @@ Route<dynamic> onGeneratesAppRoutes(RouteSettings routeSettings) {
                     homeRepository: context.read<HomeRepository>(),
                   )..add(
                     FetchEvent(type: '1', offset: '0'),
-                  ), // 👈 initial fetch event
+                  ),
               child: HomeScreen(userData: userData),
             ),
       );

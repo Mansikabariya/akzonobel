@@ -10,8 +10,6 @@ class TTextTheme {
       fontFamily: 'Poppins',
       fontSize: 20,
       fontWeight: FontWeight.w500,
-      letterSpacing: -1,
-      wordSpacing: 3,
     ),
 
     bodyMedium: TextStyle(
@@ -43,17 +41,17 @@ class TTextTheme {
     ),
 
     labelMedium: TextStyle(
-      color: Colors.grey,
+      color: Colors.grey[600],
       fontSize: 14,
       fontFamily: 'Poppins',
       // fontWeight: FontWeight.w300,
     ),
 
     titleMedium: TextStyle(
-      color: Colors.grey[700],
+      color: Colors.grey[600],
       fontSize: 16,
       fontFamily: 'Poppins',
-      fontWeight: FontWeight.w200,
+      // fontWeight: FontWeight.w200,
     ),
 
     titleSmall: TextStyle(
@@ -65,9 +63,9 @@ class TTextTheme {
 
     headlineMedium: TextStyle(
       color: Colors.black,
-      fontSize: 14,
+      fontSize: 12,
       fontFamily: 'Poppins',
-      fontWeight: FontWeight.w300,
+      fontWeight: FontWeight.w400,
     ),
   );
 }

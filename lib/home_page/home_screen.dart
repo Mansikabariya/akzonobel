@@ -117,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen>
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14,
-                        fontWeight: FontWeight.w300,
+                        // fontWeight: FontWeight.w300,
                       ),
                     ),
                   ),
@@ -127,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen>
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14,
-                        fontWeight: FontWeight.w300,
+                        // fontWeight: FontWeight.w300,
                       ),
                     ),
                   ),
@@ -266,6 +266,7 @@ class EventBanner extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: Card(
+        color: AppColors.mainBGColor,
         elevation: 2,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         child: Column(
@@ -325,15 +326,15 @@ class EventBanner extends StatelessWidget {
                           location,
                           overflow: TextOverflow.ellipsis,
                           style: Theme.of(context).textTheme.labelMedium!
-                              .copyWith(fontSize: 12, color: Colors.black54),
+                              .copyWith(fontSize: 12),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 5),
+                  const SizedBox(height: 4),
                   Row(
                     children: [
-                      Expanded(
+                      Flexible(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
@@ -343,13 +344,13 @@ class EventBanner extends StatelessWidget {
                               size: 16,
                             ),
                             const SizedBox(width: 4),
-                            Text(
-                              'Start: $startDate',
-                              style: const TextStyle(
-                                color: Colors.black54,
-                                fontSize: 12,
+                            Flexible(
+                              child: Text(
+                                'Start: $startDate',
+                                style: Theme.of(context).textTheme.labelMedium!
+                                    .copyWith(fontSize: 12),
+                                overflow: TextOverflow.ellipsis,
                               ),
-                              overflow: TextOverflow.ellipsis,
                             ),
                           ],
                         ),
@@ -367,10 +368,8 @@ class EventBanner extends StatelessWidget {
                             Flexible(
                               child: Text(
                                 'End: $endDate',
-                                style: const TextStyle(
-                                  color: Colors.black54,
-                                  fontSize: 12,
-                                ),
+                                style: Theme.of(context).textTheme.labelMedium!
+                                    .copyWith(fontSize: 12),
                                 overflow: TextOverflow.ellipsis,
                                 textAlign: TextAlign.right,
                               ),
