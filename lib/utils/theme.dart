@@ -1,4 +1,5 @@
 import 'package:akzonobel/utils/app_color.dart';
+import 'package:akzonobel/utils/app_font_family.dart';
 import 'package:flutter/material.dart';
 
 class TTextTheme {
@@ -7,7 +8,7 @@ class TTextTheme {
   static TextTheme lightTheme = TextTheme(
     displayMedium: TextStyle(
       color: Colors.black,
-      fontFamily: 'Poppins',
+      fontFamily: AppFontFamily.poppins,
       fontSize: 20,
       fontWeight: FontWeight.w500,
     ),
@@ -15,56 +16,56 @@ class TTextTheme {
     bodyMedium: TextStyle(
       color: Colors.black,
       fontSize: 18,
-      fontFamily: 'Poppins',
+      fontFamily: AppFontFamily.poppins,
       fontWeight: FontWeight.w500,
     ),
 
     bodySmall: TextStyle(
       color: Colors.black,
-      fontSize: 16,
-      fontFamily: 'Poppins',
+      fontSize: 12,
+      fontFamily: AppFontFamily.poppins,
       fontWeight: FontWeight.w300,
     ),
 
     labelSmall: TextStyle(
       color: Colors.grey[800],
       fontSize: 14,
-      fontFamily: 'Poppins',
+      fontFamily: AppFontFamily.poppins,
       fontWeight: FontWeight.w200,
     ),
 
     headlineSmall: TextStyle(
       color: Colors.white,
       fontSize: 16,
-      fontFamily: 'Poppins',
+      fontFamily: AppFontFamily.poppins,
       fontWeight: FontWeight.w500,
     ),
 
     labelMedium: TextStyle(
       color: Colors.grey[600],
       fontSize: 14,
-      fontFamily: 'Poppins',
+      fontFamily: AppFontFamily.poppins,
       // fontWeight: FontWeight.w300,
     ),
 
     titleMedium: TextStyle(
       color: Colors.grey[600],
       fontSize: 16,
-      fontFamily: 'Poppins',
+      fontFamily: AppFontFamily.poppins,
       // fontWeight: FontWeight.w200,
     ),
 
     titleSmall: TextStyle(
       color: Colors.blue[800],
       fontSize: 14,
-      fontFamily: 'Poppins',
+      fontFamily: AppFontFamily.poppins,
       fontWeight: FontWeight.w400,
     ),
 
     headlineMedium: TextStyle(
       color: Colors.black,
       fontSize: 12,
-      fontFamily: 'Poppins',
+      fontFamily: AppFontFamily.poppins,
       fontWeight: FontWeight.w400,
     ),
   );
@@ -82,7 +83,7 @@ class TElevatedButtonTheme {
   );
 }
 
-class TAppBarTheme{
+class TAppBarTheme {
   TAppBarTheme._();
 
   static AppBarTheme lightAppBarTheme = AppBarTheme(

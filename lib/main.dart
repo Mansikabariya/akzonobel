@@ -36,7 +36,11 @@ void main() async {
         ),
         // Provide the HomeRepository instance
         RepositoryProvider<HomeRepository>(
-          create: (context) => HomeRepository(appApiService: RepositoryProvider.of<AppApiService>(context), localStorage: LocalStorage.shared),
+          create:
+              (context) => HomeRepository(
+                appApiService: RepositoryProvider.of<AppApiService>(context),
+                localStorage: LocalStorage.shared,
+              ),
         ),
       ],
       child: MultiBlocProvider(
@@ -47,11 +51,10 @@ void main() async {
                     LoginBloc(authRepository: RepositoryProvider.of(context)),
           ),
           BlocProvider(
-            create: (context) => HomePageBloc(
-              homeRepository: context.read<HomeRepository>(),
-            )..add(FetchEvent(type: '1', offset: '0')),
-            child: HomeScreen(userData: UserData()),
-          )
+            create: (context) =>
+                HomePageBloc(homeRepository: context.read<HomeRepository>()),
+          ),
+
         ],
         child: const MyApp(),
       ),
@@ -59,15 +62,50 @@ void main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  Widget? home;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkLogin();
+  }
+
+  Future<void> _checkLogin() async {
+    final isLoggedIn = await LocalStorage.shared.isLoggedIn();
+    if (isLoggedIn) {
+      final userData = await LocalStorage.shared.getUserData();
+      context.read<HomePageBloc>().add(FetchEvent(type: '1', offset: '0'));
+      home = HomeScreen(userData: userData!);
+    } else {
+      home = const LoginScreen();
+    }
+
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      themeMode: ThemeMode.system,
       onGenerateRoute: onGeneratesAppRoutes,
       theme: ThemeData(
-        colorScheme: ColorScheme.light(primary: Colors.blue, secondary: Colors.red, tertiary: Colors.yellow),
+        colorScheme: ColorScheme.light(
+          primary: Colors.blue,
+          secondary: Colors.red,
+          tertiary: Colors.yellow,
+        ),
         useMaterial3: true,
         textTheme: TTextTheme.lightTheme,
         elevatedButtonTheme: TElevatedButtonTheme.lightButtonTheme,
@@ -77,11 +115,7 @@ class MyApp extends StatelessWidget {
       supportedLocales: AppLocalizations.supportedLocales,
       debugShowCheckedModeBanner: false,
       home:
-      // await LocalStorage.shared.isLoggedIn()
-      //     ? HomeScreen(userData: await LocalStorage.shared.getUserData(),)
-      //     : const LoginScreen(),
-      const LoginScreen(),
-
+          _isLoading ? const Center(child: CircularProgressIndicator()) : home,
     );
   }
 }

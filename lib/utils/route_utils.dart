@@ -7,7 +7,7 @@ import 'package:akzonobel/profile_page/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../home_page/bloc/home_page_bloc.dart';
+import 'package:akzonobel/home_page/bloc/home_page_bloc.dart';
 
 Route<dynamic> onGeneratesAppRoutes(RouteSettings routeSettings) {
   switch (routeSettings.name) {

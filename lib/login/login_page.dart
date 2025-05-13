@@ -24,6 +24,25 @@ class _LoginScreenState extends State<LoginScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool autoValidate = false;
+
+  String? validateEmail(String? value) {
+    if (value!.trim().isEmpty) {
+      return 'This field is required';
+    }
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    if (!emailRegex.hasMatch(value.trim())) {
+      return 'Enter a valid email address';
+    }
+    return null;
+  }
+
+  String? validatePassword(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'This field is required';
+    }
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +58,11 @@ class _LoginScreenState extends State<LoginScreen> {
         } else if (state is LoginSuccess) {
           Navigator.of(context).pop();
           AppUtils.instance.showSnackBar(context, state.successMessage);
-          Navigator.pushReplacementNamed(context, HomeScreen.route, arguments: state.data);
+          Navigator.pushReplacementNamed(
+            context,
+            HomeScreen.route,
+            arguments: state.data,
+          );
         } else if (state is LoginError) {
           Navigator.of(context).pop();
           AppUtils.instance.showSnackBar(context, state.message);
@@ -62,44 +85,48 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(height: 100),
             Form(
               key: _formKey,
+              autovalidateMode:
+                  autoValidate
+                      ? AutovalidateMode.onUserInteraction
+                      : AutovalidateMode.disabled,
               child: Column(
                 children: [
                   CustomTextFormField(
-                    keyboardType: TextInputType.emailAddress,
                     controller: emailController,
                     hint: l10n.email,
                     label: l10n.email,
                     icon: Icon(Icons.email, size: 18, color: Colors.grey[800]),
-                    validator: (value) {
-                      if(value == null || value.trim().isEmpty)
-                        {
-                          return 'This field is required';
-                        }
-                      return null;
+                    validator: validateEmail,
+                    onChanged: (value) {
+                      if (autoValidate) {
+                        setState(() {});
+                      }
                     },
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 8),
                   CustomTextFormField(
+                    keyboardType: TextInputType.emailAddress,
                     controller: passwordController,
                     hint: l10n.password,
                     label: l10n.password,
                     isPassword: true,
                     icon: Icon(Icons.lock, size: 18, color: Colors.grey[800]),
-                    validator: (value) {
-                      if(value == null || value.trim().isEmpty)
-                      {
-                        return 'This field is required';
+                    validator: validatePassword,
+                    onChanged: (value) {
+                      if (autoValidate) {
+                        setState(() {});
                       }
-                      return null;
                     },
                   ),
-                  const SizedBox(height: 40),
+                  const SizedBox(height: 16),
                   CustomElevatedButton(
                     onPressed: () {
-                      if(_formKey.currentState!.validate())
-                        {
-                          callLoginAPI();
-                        }
+                      setState(() {
+                        autoValidate = true;
+                      });
+                      if (_formKey.currentState!.validate()) {
+                        callLoginAPI();
+                      }
                     },
                     text: l10n.signIn,
                     height: 45,
@@ -129,7 +156,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
 
             Padding(
-              padding: EdgeInsets.only(top: 50),
+              padding: EdgeInsets.only(top: 48),
               child: Text(
                 l10n.noAccount,
                 style: Theme.of(context).textTheme.headlineMedium,

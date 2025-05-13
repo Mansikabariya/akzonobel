@@ -1,3 +1,4 @@
+import 'package:akzonobel/utils/app_font_family.dart';
 import 'package:flutter/material.dart';
 
 // custom text fields for reuse
@@ -9,6 +10,7 @@ class CustomTextFormField extends StatefulWidget {
   final String hint;
   final TextInputType keyboardType;
   final String? Function(String?)? validator;
+  final void Function(String)? onChanged;
 
   const CustomTextFormField({
     super.key,
@@ -19,6 +21,7 @@ class CustomTextFormField extends StatefulWidget {
     this.isPassword = false,
     this.keyboardType = TextInputType.name,
     this.validator,
+    this.onChanged,
   });
 
   @override
@@ -34,15 +37,17 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       padding: const EdgeInsets.only(left: 24, right: 24),
       child: TextFormField(
         validator: widget.validator,
+        onChanged: widget.onChanged,
         keyboardType: widget.keyboardType,
-        style: TextStyle(fontFamily: 'Poppins'),
+        style: TextStyle(fontFamily: AppFontFamily.poppins),
         controller: widget.controller,
         obscureText: widget.isPassword ? _obscureText : false,
         decoration: InputDecoration(
           prefixIcon: widget.icon,
           labelText: widget.label,
-          labelStyle: TextStyle(fontFamily: 'Poppins'),
+          labelStyle: TextStyle(fontFamily: AppFontFamily.poppins),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+          helperText: '',
           suffixIcon:
               widget.isPassword
                   ? IconButton(
