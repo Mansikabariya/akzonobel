@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-class TTextTheme
-{
+class TTextTheme {
   TTextTheme._();
 
   static TextTheme lightTheme = TextTheme(
@@ -12,6 +11,13 @@ class TTextTheme
       fontWeight: FontWeight.w500,
       letterSpacing: -1,
       wordSpacing: 3,
+    ),
+
+    bodyMedium: TextStyle(
+      color: Colors.black,
+      fontSize: 18,
+      fontFamily: 'Poppins',
+      fontWeight: FontWeight.w500,
     ),
 
     bodySmall: TextStyle(
@@ -36,10 +42,17 @@ class TTextTheme
     ),
 
     labelMedium: TextStyle(
-      color: Color(0xFF0D47A1),
+      color: Colors.grey,
       fontSize: 14,
       fontFamily: 'Poppins',
-      fontWeight: FontWeight.w300,
+      // fontWeight: FontWeight.w300,
+    ),
+
+    titleMedium: TextStyle(
+      color: Colors.grey[700],
+      fontSize: 16,
+      fontFamily: 'Poppins',
+      fontWeight: FontWeight.w200,
     ),
 
     titleSmall: TextStyle(
@@ -55,14 +68,10 @@ class TTextTheme
       fontFamily: 'Poppins',
       fontWeight: FontWeight.w300,
     ),
-
-
   );
 }
 
-
-class TElevatedButtonTheme
-{
+class TElevatedButtonTheme {
   TElevatedButtonTheme._();
 
   static ElevatedButtonThemeData lightButtonTheme = ElevatedButtonThemeData(
